@@ -1,0 +1,16 @@
+[
+{
+  "modid": "LostBooks",
+  "name": "Lost Books",
+  "description": "Adds completely configurable pre-written and procedurally generated books as mob drops.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://www.minecraftforum.net/topic/1153874-/",
+  "updateUrl": "",
+  "authorList": ["FatherToast"],
+  "credits": "See config/LostBooks/authors.txt!",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
