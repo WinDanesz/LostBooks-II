@@ -1,13 +1,13 @@
 [
 {
-  "modid": "LostBooks",
-  "name": "Lost Books",
-  "description": "Adds completely configurable pre-written and procedurally generated books as mob drops.",
+  "modid": "lostbooks",
+  "name": "Lost Books II",
+  "description": "Lost Books II is a port of FatherToast's Lost Book (1.7.10) mod to 1.12.2 by WinDanesz. Adds completely configurable pre-written and procedurally generated books as mob drops.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "http://www.minecraftforum.net/topic/1153874-/",
+  "url": "ToDo - new CF page url",
   "updateUrl": "",
-  "authorList": ["FatherToast"],
+  "authorList": ["FatherToast" , "WinDanesz"],
   "credits": "See config/LostBooks/authors.txt!",
   "logoFile": "",
   "screenshots": [],
