@@ -12,25 +12,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class BookHelper {
     /// Returns true if the book has a book id.
     public static boolean hasBookId(ItemStack book) {
-        return book.stackTagCompound != null && book.stackTagCompound.hasKey("LB|ID");
+        return book.getTagCompound() != null && book.getTagCompound().hasKey("LB|ID");
     }
 
     /// Gets the book's id, returns null if no id is found.
     public static String getBookId(ItemStack book) {
         if (!BookHelper.hasBookId(book))
             return null;
-        return book.stackTagCompound.getString("LB|ID");
+        return book.getTagCompound().getString("LB|ID");
     }
 
     /// Removes the book's id, if any. Returns true if the book is changed.
     public static boolean removeBookId(ItemStack book) {
         if (BookHelper.hasBookId(book)) {
-            book.stackTagCompound.removeTag("LB|ID");
+            book.getTagCompound().removeTag("LB|ID");
             return true;
         }
         return false;
@@ -38,56 +39,56 @@ public abstract class BookHelper {
 
     /// Sets the book's id, title, and author.
     public static void setTitleAndAuthor(ItemStack book, String id, String title, String author) {
-        if (book.stackTagCompound == null) {
+        if (book.getTagCompound() == null) {
             book.setTagCompound(new NBTTagCompound());
         }
-        book.stackTagCompound.setString("LB|ID", id == null ? "" : id);
-        book.stackTagCompound.setString("title", title);
+        book.getTagCompound().setString("LB|ID", id == null ? "" : id);
+        book.getTagCompound().setString("title", title);
         if (author != "") {
-            book.stackTagCompound.setString("author", author);
+            book.getTagCompound().setString("author", author);
         }
     }
 
     public static void setTitleAndAuthor(ItemStack book, String title, String author) {
-        if (book.stackTagCompound == null) {
+        if (book.getTagCompound() == null) {
             book.setTagCompound(new NBTTagCompound());
         }
-        book.stackTagCompound.setString("title", title);
-        if (author != "") {
-            book.stackTagCompound.setString("author", author);
+        book.getTagCompound().setString("title", title);
+        if (author.equals("")) {
+            book.getTagCompound().setString("author", author);
         }
     }
 
     public static void setTitle(ItemStack book, String title) {
-        if (book.stackTagCompound == null) {
+        if (book.getTagCompound() == null) {
             book.setTagCompound(new NBTTagCompound());
         }
-        book.stackTagCompound.setString("title", title);
+        book.getTagCompound().setString("title", title);
     }
 
     public static void setAuthor(ItemStack book, String author) {
-        if (author == "")
+        if (author.equals(""))
             return;
-        if (book.stackTagCompound == null) {
+        if (book.getTagCompound() == null) {
             book.setTagCompound(new NBTTagCompound());
         }
-        book.stackTagCompound.setString("author", author);
+        book.getTagCompound().setString("author", author);
     }
 
     /// Returns the book's title.
     public static String getTitle(ItemStack book) {
-        if (book.stackTagCompound == null)
+        if (book.getTagCompound() == null)
             return "Untitled Book";
-        return book.stackTagCompound.getString("title");
+        return book.getTagCompound().getString("title");
     }
 
     /// Sets the book's content.
     public static void setPages(ItemStack book, String... pages) {
-        if (book.stackTagCompound == null) {
+        if (book.getTagCompound() == null) {
             book.setTagCompound(new NBTTagCompound());
         }
-        book.stackTagCompound.setTag("pages", new NBTTagList());
-        NBTTagList pagesTag = book.stackTagCompound.getTagList("pages", 8);
+        book.getTagCompound().setTag("pages", new NBTTagList());
+        NBTTagList pagesTag = book.getTagCompound().getTagList("pages", 8);
         for (String page : pages) {
             pagesTag.appendTag(new NBTTagString(page));
         }
@@ -95,13 +96,13 @@ public abstract class BookHelper {
 
     /// Writes the given text to the book's tool tip.
     public static void addItemText(ItemStack book, String... text) {
-        if (book.stackTagCompound == null) {
+        if (book.getTagCompound() == null) {
             book.setTagCompound(new NBTTagCompound());
         }
-        if (!book.stackTagCompound.hasKey("display")) {
-            book.stackTagCompound.setTag("display", new NBTTagCompound());
+        if (!book.getTagCompound().hasKey("display")) {
+            book.getTagCompound().setTag("display", new NBTTagCompound());
         }
-        NBTTagCompound tag = book.stackTagCompound.getCompoundTag("display");
+        NBTTagCompound tag = book.getTagCompound().getCompoundTag("display");
         if (!tag.hasKey("Lore")) {
             tag.setTag("Lore", new NBTTagList());
         }
@@ -119,7 +120,7 @@ public abstract class BookHelper {
     public static HashSet<String> getBookData(EntityPlayer player) {
         if (player == null)
             return new HashSet<String>(0);
-        return FileHelper.loadBookData(player.getCommandSenderName());
+        return FileHelper.loadBookData(player.getCommandSenderEntity().getName());
     }
 
     /// Returns true if the book has already been found by the player.
@@ -129,14 +130,16 @@ public abstract class BookHelper {
 
     /// Saves the book id to the player to denote that the book has been picked up once.
     public static void markBookAsFound(EntityPlayer player, String id) {
-        FileHelper.addBookData(player.getCommandSenderName(), id);
+        FileHelper.addBookData(player.getCommandSenderEntity().getName(), id);
     }
 
     /// Returns true if a book with the given properties can be dropped by the entity.
     public static boolean canBookDrop(EntityLivingBase entity, ArrayList<Class> whitelist, ArrayList<Class> blacklist, HashSet<Integer> biomes) {
         // Check for valid biome
-        if (biomes != null && !biomes.contains(Integer.valueOf(entity.worldObj.getBiomeGenForCoords((int) Math.floor(entity.posX), (int) Math.floor(entity.posZ)).biomeID)))
-            return false;
+		// TODO: FIX THIS
+		//		if (biomes != null && !biomes.contains(Integer.valueOf(entity.worldObj.getBiomeGenForCoords((int) Math.floor(entity.posX), (int) Math.floor(entity.posZ)).biomeID))) {
+		//			return false;
+		//		}
         // Check for valid mob
         Class entityClass = entity.getClass();
         if (blacklist != null) {
@@ -154,21 +157,21 @@ public abstract class BookHelper {
 
     /// Gets the book's last recorded current page.
     public static int getCurrentPage(ItemStack book) {
-        if (book.stackTagCompound == null)
+        if (book.getTagCompound() == null)
             return 0;
-        return book.stackTagCompound.getInteger("LB|CP");
+        return book.getTagCompound().getInteger("LB|CP");
     }
 
     /// Sets the book's current page.
     public static void setCurrentPage(ItemStack book, int currPage) {
-        if (book.stackTagCompound == null) {
-            book.stackTagCompound = new NBTTagCompound();
+        if (book.getTagCompound() == null) {
+            book.setTagCompound(new NBTTagCompound());
         }
         if (currPage <= 0) {
-            book.stackTagCompound.removeTag("LB|CP");
+            book.getTagCompound().removeTag("LB|CP");
         }
         else {
-            book.stackTagCompound.setInteger("LB|CP", currPage);
+            book.getTagCompound().setInteger("LB|CP", currPage);
         }
     }
 

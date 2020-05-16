@@ -46,7 +46,7 @@ public class BookProperties {
      * passive.EntityMooshroom.class, "MushroomCow"
      * passive.EntityOcelot.class, "Ozelot"
      * passive.EntityVillager.class, "Villager"
-     * 
+     *
      * (not technically IDs)
      * <next three classes> "Default"
      * IMerchant.class, "Merchant"
@@ -179,10 +179,10 @@ public class BookProperties {
         HashSet<Integer> ids = new HashSet<Integer>();
         for (String entry : idArray) {
             try {
-                ids.add(Integer.valueOf(Integer.parseInt(entry)));
+                ids.add((Integer.parseInt(entry)));
             }
             catch (Exception ex) {
-                _LostBooks.console("[WARNING] \"" + entry + "\" is an invalid biome id. Location: " + location);
+                LostBooks.console("[WARNING] \"" + entry + "\" is an invalid biome id. Location: " + location);
             }
         }
         if (ids.size() > 0)
@@ -224,15 +224,15 @@ public class BookProperties {
                 }
             }
             /// Check if it is an entity id
-            else if (EntityList.stringToClassMapping.containsKey(entry)) {
+            else if (EntityList.getEntityNameList().contains(entry)) {
                 try {
-                    Class entityClass = (Class) EntityList.stringToClassMapping.get(entry);
+                    Class entityClass = (Class) EntityList.getClassFromName(entry);
                     if (!classes.contains(entityClass)) {
                         classes.add(entityClass);
                     }
                 }
                 catch (Exception ex) {
-                    _LostBooks.console("[ERROR] \"" + entry + "\" is not registered properly (EntityList). Location: " + location);
+                    LostBooks.console("[ERROR] \"" + entry + "\" is not registered properly (EntityList). Location: " + location);
                 }
             }
             /// Try to read it as an absolute path
@@ -244,7 +244,7 @@ public class BookProperties {
                     }
                 }
                 catch (Exception ex) {
-                    _LostBooks.console("[WARNING] \"" + entry + "\" is invalid. Location: " + location);
+                    LostBooks.console("[WARNING] \"" + entry + "\" is invalid. Location: " + location);
                 }
             }
         }

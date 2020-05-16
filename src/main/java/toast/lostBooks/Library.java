@@ -20,11 +20,11 @@ public abstract class Library {
     public static final char S = 0x00a7;
 
     /// Collection of all registered unique books.
-    public static final IBook UNIQUE_BOOKS = new BookCollection("unique", new File(_LostBooks.CONFIG_DIRECTORY, "/LostBooks/unique"));
+    public static final IBook UNIQUE_BOOKS = new BookCollection("unique", new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks/unique"));
     /// Collection of all registered common books.
-    public static final IBook COMMON_BOOKS = new BookCollection("common", new File(_LostBooks.CONFIG_DIRECTORY, "/LostBooks/common"));
+    public static final IBook COMMON_BOOKS = new BookCollection("common", new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks/common"));
     /// Collection of all registered ad lib books.
-    public static final IBook AD_LIB_BOOKS = new BookCollection("adlib", new File(_LostBooks.CONFIG_DIRECTORY, "/LostBooks/adLib"));
+    public static final IBook AD_LIB_BOOKS = new BookCollection("adlib", new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks/adLib"));
     /// Collection representing lost books.
     public static final LostBookCollection LOST_BOOKS = new LostBookCollection("lost");
     /// Number of unique books, so it doesn't need to be calculated every time.
@@ -34,7 +34,7 @@ public abstract class Library {
     public static ItemStack nextBook(EntityLivingBase entity) {
         IBook category = RandomHelper.choose(entity, Library.UNIQUE_BOOKS, Library.COMMON_BOOKS, Library.AD_LIB_BOOKS, Library.LOST_BOOKS);
         if (category != null) {
-            ItemStack book = new ItemStack(Items.written_book);
+            ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
             BookStats story = category.getBookStats(entity);
             if (category == Library.UNIQUE_BOOKS) {
                 if (story == null) {
@@ -49,7 +49,7 @@ public abstract class Library {
             }
             if (story != null) {
                 story.writeTo(book);
-                if (book.stackTagCompound != null)
+                if (book.hasTagCompound())
                     return book;
             }
         }
@@ -60,7 +60,7 @@ public abstract class Library {
     public static ItemStack nextSpawnBook(EntityPlayer player) {
         IBook category = RandomHelper.chooseSpawn(player, Library.UNIQUE_BOOKS, Library.COMMON_BOOKS, Library.AD_LIB_BOOKS, Library.LOST_BOOKS);
         if (category != null) {
-            ItemStack book = new ItemStack(Items.written_book);
+            ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
             BookStats story = category.getBookStatsSpawn(player);
             if (category == Library.UNIQUE_BOOKS) {
                 if (story == null) {
@@ -75,7 +75,7 @@ public abstract class Library {
             }
             if (story != null) {
                 story.writeTo(book);
-                if (book.stackTagCompound != null)
+                if (book.hasTagCompound())
                     return book;
             }
         }
@@ -97,7 +97,7 @@ public abstract class Library {
         if (category != null) {
             BookStats story = category.getBookStatsTrade(entity);
             if (story != null) {
-                ItemStack book = story.writeTo(new ItemStack(Items.written_book));
+                ItemStack book = story.writeTo(new ItemStack(Items.WRITTEN_BOOK));
                 BookHelper.removeBookId(book);
                 return book;
             }

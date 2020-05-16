@@ -25,11 +25,11 @@ public class LostBookCollection implements IBook {
     /// Called when a book is "lost" to save it. It is assumed the book is appropriate, for the most part.
     @SuppressWarnings("resource")
     public void capture(ItemStack book) {
-        if (book == null || book.stackTagCompound == null)
+        if (book == null || book.hasTagCompound())
             return;
         try {
             String fileName = "";
-            for (char letter : book.stackTagCompound.getString("title").toCharArray())
+            for (char letter : book.getTagCompound().getString("title").toCharArray())
                 if (Character.isLetterOrDigit(letter)) {
                     fileName += Character.toString(letter);
                 }
@@ -45,10 +45,10 @@ public class LostBookCollection implements IBook {
                 fileName += attempt;
             }
             CompressedStreamTools.writeCompressed(book.writeToNBT(new NBTTagCompound()), new FileOutputStream(save));
-            book.stackSize = 0;
+            book.setCount(0);
         }
         catch (Exception ex) {
-            _LostBooks.console("Failed to capture lost book!");
+            LostBooks.console("Failed to capture lost book!");
             ex.printStackTrace();
         }
     }
@@ -136,6 +136,7 @@ public class LostBookCollection implements IBook {
     @Override
     public int size() {
         try {
+            //nullpointer error
             return LostBookCollection.BOOK_DIRECTORY.listFiles(new FileHelper.ExtensionFilter(".dat")).length;
         }
         catch (Exception ex) {

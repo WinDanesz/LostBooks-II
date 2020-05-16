@@ -7,8 +7,8 @@ import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority; //import cpw.mods.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent; //import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class EventHandler {
     public EventHandler() {
@@ -23,19 +23,19 @@ public class EventHandler {
      * int lootingLevel = the attacker's looting level.
      * boolean recentlyHit = if the entity was recently hit by another player.
      * int specialDropValue = recentlyHit ? entityLiving.getRNG().nextInt(200) - lootingLevel : 0.
-     * 
+     *
      * @param event The event being triggered.
      */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onLivingDrops(LivingDropsEvent event) {
-        if (event.entityLiving == null || event.entityLiving.worldObj.isRemote)
+        if (event.getEntityLiving()== null || event.getEntityLiving().world.isRemote)
             return;
-        if (_LostBooks.debug || event.recentlyHit && Properties.getBoolean(Properties.GENERAL, "dropRate", event.entityLiving.getRNG())) {
-            ItemStack book = Library.nextBook(event.entityLiving);
+        if (LostBooks.debug || event.isRecentlyHit() && Properties.getBoolean(Properties.GENERAL, "dropRate", event.getEntityLiving().getRNG())) {
+            ItemStack book = Library.nextBook(event.getEntityLiving());
             if (book != null) {
-                EntityItem drop = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, book);
-                drop.delayBeforeCanPickup = 10;
-                event.drops.add(drop);
+                EntityItem drop = new EntityItem(event.getEntityLiving().world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, book);
+                drop.setPickupDelay(10);
+				event.getDrops().add(drop);
             }
         }
     }
@@ -44,30 +44,31 @@ public class EventHandler {
      * Called by <unknown>.
      * EntityPlayer entityPlayer = the player picking up the item.
      * EntityItem item = the item being picked up.
-     * 
+     *
      * @param event The event being triggered.
      */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onEntityItemPickup(EntityItemPickupEvent event) {
-        if (event.entityPlayer == null || event.entityPlayer.worldObj.isRemote)
+        if (event.getEntityPlayer() == null || event.getEntityPlayer().world.isRemote)
             return;
-        ItemStack book = event.item.getEntityItem();
+        ItemStack book = event.getItem().getItem();
         String id = BookHelper.getBookId(book);
         if (id == null || id == "") {
             // Do nothing.
         }
-        else if (BookHelper.isBookFound(event.entityPlayer, id)) {
+        else if (BookHelper.isBookFound(event.getEntityPlayer(), id)) {
             if (Properties.getBoolean(Properties.GENERAL, "hardUniqueBlackouts")) {
                 event.setCanceled(true);
                 return;
             }
         }
         else if (Blackouts.DROP_BLACKOUTS) {
-            BookHelper.markBookAsFound(event.entityPlayer, id);
-            TickHandler.unloadBlackouts(event.entityPlayer.worldObj);
+            BookHelper.markBookAsFound(event.getEntityPlayer(), id);
+            TickHandler.unloadBlackouts(event.getEntityPlayer().world);
         }
-        if (!event.item.worldObj.isRemote && BookHelper.removeBookId(book)) {
-            event.item.setEntityItemStack(book);
+        if (!event.getItem().world.isRemote && BookHelper.removeBookId(book)) {
+            event.getItem().setItem(book);
+//            event.item.setEntityItemStack(book);
         }
     }
 
@@ -75,17 +76,17 @@ public class EventHandler {
      * Called by EntityItem.onUpdate().
      * EntityItem entityItem = the expiring item.
      * int extraLife = the time added to the item's life if this event is cancelled.
-     * 
+     *
      * @param event The event being triggered.
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onItemExpire(ItemExpireEvent event) {
         if (Properties.getBoolean(Properties.GENERAL, "lostBookCaptureRate") && !event.isCanceled()) {
-            ItemStack book = event.entityItem.getEntityItem();
-            if (book.getItem().getUnlocalizedName(book).equals("item.writtenBook") && !BookHelper.hasBookId(book)) {
+			ItemStack book = event.getEntityItem().getItem();
+            if (book.getItem().getUnlocalizedNameInefficiently(book).equals("item.writtenBook") && !BookHelper.hasBookId(book)) {
                 Library.LOST_BOOKS.capture(book);
-                if (!event.entityItem.worldObj.isRemote) {
-                    event.entityItem.setEntityItemStack(book);
+                if (!event.getEntityItem().world.isRemote) {
+                    event.getEntityItem().setItem(book);
                 }
             }
         }
@@ -94,13 +95,13 @@ public class EventHandler {
     /**
      * Called by MinecraftServer.unloadAllWorlds()?.
      * World world = the world being unloaded.
-     * 
+     *
      * @param event The event being triggered.
      */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldUnload(WorldEvent.Unload event) {
-        if (event.world != null && !event.world.isRemote) {
-            TickHandler.unloadBlackouts(event.world);
+        if (event.getWorld() != null && !event.getWorld().isRemote) {
+            TickHandler.unloadBlackouts(event.getWorld());
         }
     }
 }

@@ -17,7 +17,7 @@ public abstract class RandomHelper {
                 totalWeight += items[i].getWeight();
             }
         if (totalWeight > 0) {
-            totalWeight = _LostBooks.random.nextInt(totalWeight);
+            totalWeight = LostBooks.random.nextInt(totalWeight);
             for (int i = 0; i < length; i++)
                 if (valid[i] && (totalWeight -= items[i].getWeight()) < 0)
                     return items[i];
@@ -38,7 +38,7 @@ public abstract class RandomHelper {
                 totalWeight += items[i].getWeight();
             }
         if (totalWeight > 0) {
-            totalWeight = _LostBooks.random.nextInt(totalWeight);
+            totalWeight = LostBooks.random.nextInt(totalWeight);
             for (int i = 0; i < length; i++)
                 if (valid[i] && (totalWeight -= items[i].getWeight()) < 0)
                     return items[i];
@@ -59,7 +59,7 @@ public abstract class RandomHelper {
                 totalWeight += items[i].getWeight();
             }
         if (totalWeight > 0) {
-            totalWeight = _LostBooks.random.nextInt(totalWeight);
+            totalWeight = LostBooks.random.nextInt(totalWeight);
             for (int i = 0; i < length; i++)
                 if (valid[i] && (totalWeight -= items[i].getWeight()) < 0)
                     return items[i];

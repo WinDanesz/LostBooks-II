@@ -1,58 +1,58 @@
 package toast.lostBooks;
 
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import java.util.HashMap;
 
-import net.minecraft.world.World;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-
 public class TickHandler {
-    /// Cache of blacked out book IDs for each world. Only updated when a unique book is dropped, and only if sufficient time has passed or a unique book has been picked up.
-    private static final HashMap<World, Blackouts> blackoutCache = new HashMap<World, Blackouts>();
-    /// Counter to periodically clear the blackout cache.
-    private static byte updateTicks = Byte.MIN_VALUE;
+	/// Cache of blacked out book IDs for each world. Only updated when a unique book is dropped, and only if sufficient time has passed or a unique book has been picked up.
+	private static final HashMap<World, Blackouts> blackoutCache = new HashMap<World, Blackouts>();
+	/// Counter to periodically clear the blackout cache.
+	private static byte updateTicks = Byte.MIN_VALUE;
 
-    /// Gets or creates a new blackout object and caches it.
-    public static Blackouts getOrCreateBlackouts(World world) {
-        Blackouts blackouts = TickHandler.blackoutCache.get(world);
-        if (blackouts == null) {
-            blackouts = new Blackouts(world);
-            TickHandler.blackoutCache.put(world, blackouts);
-        }
-        return blackouts;
-    }
+	/// Gets or creates a new blackout object and caches it.
+	public static Blackouts getOrCreateBlackouts(World world) {
+		Blackouts blackouts = TickHandler.blackoutCache.get(world);
+		if (blackouts == null) {
+			blackouts = new Blackouts(world);
+			TickHandler.blackoutCache.put(world, blackouts);
+		}
+		return blackouts;
+	}
 
-    /// Clears the blackouts from the cache.
-    public static void unloadBlackouts() {
-        TickHandler.blackoutCache.clear();
-    }
+	/// Clears the blackouts from the cache.
+	public static void unloadBlackouts() {
+		TickHandler.blackoutCache.clear();
+	}
 
-    public static void unloadBlackouts(World world) {
-        TickHandler.blackoutCache.remove(world);
-    }
+	public static void unloadBlackouts(World world) {
+		TickHandler.blackoutCache.remove(world);
+	}
 
-    public TickHandler() {
-        FMLCommonHandler.instance().bus().register(this);
-    }
+	public TickHandler() {
+		FMLCommonHandler.instance().bus().register(this);
+	}
 
-    /**
-     * Called when the config is changed.
-     * String modID = the id of the mod.
-     * boolean isWorldRunning = true if the world is running.
-     * boolean requiresMcRestart = true if any changed items are marked as requiring a world restart.
-     * String configID = a string identifier for the config.
-     * 
-     * @param event The event being triggered.
-     */
-    @SubscribeEvent(priority = EventPriority.NORMAL)
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.modID == _LostBooks.MODID) {
-            // TODO update properties?
-        }
-    }
+	/**
+	 * Called when the config is changed.
+	 * String modID = the id of the mod.
+	 * boolean isWorldRunning = true if the world is running.
+	 * boolean requiresMcRestart = true if any changed items are marked as requiring a world restart.
+	 * String configID = a string identifier for the config.
+	 *
+	 * @param event The event being triggered.
+	 */
+	@SubscribeEvent(priority = EventPriority.NORMAL)
+	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+		if (event.getModID() == LostBooks.MODID) {
+			// TODO update properties?
+		}
+	}
 
     /**
      * Called each tick.

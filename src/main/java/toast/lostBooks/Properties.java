@@ -75,12 +75,12 @@ public abstract class Properties {
 
     /// Gets the mod's random number generator.
     public static Random random() {
-        return _LostBooks.random;
+        return LostBooks.random;
     }
 
     /// Passes to the mod.
     public static void debugException(String message) {
-        _LostBooks.debugException(message);
+        LostBooks.debugException(message);
     }
 
     /// Loads the property as the specified value.

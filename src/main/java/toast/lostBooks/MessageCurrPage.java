@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage; // import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler; // import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext; //import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageCurrPage implements IMessage {
     // The page the book is open to.
@@ -42,9 +42,9 @@ public class MessageCurrPage implements IMessage {
          */
         @Override
         public IMessage onMessage(MessageCurrPage message, MessageContext ctx) {
-            EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+            EntityPlayerMP player = ctx.getServerHandler().player;
             ItemStack book = player.inventory.getCurrentItem();
-            if (book != null && (book.getItem() == Items.written_book || book.getItem() == Items.writable_book)) {
+            if (book != null && (book.getItem() == Items.WRITTEN_BOOK || book.getItem() == Items.WRITABLE_BOOK)) {
                 BookHelper.setCurrentPage(book, message.currPage);
             }
             return null;

@@ -25,7 +25,7 @@ public abstract class FileHelper {
             LostBookCollection.BOOK_DIRECTORY.mkdirs();
         }
         catch (Exception ex) {
-            _LostBooks.console("Failed to initialize unique book data storage! You may feel a strong disturbance in the force...");
+            LostBooks.console("Failed to initialize unique book data storage! You may feel a strong disturbance in the force...");
             ex.printStackTrace();
             FileHelper.WORLD_DIRECTORY = null;
         }
@@ -275,7 +275,7 @@ public abstract class FileHelper {
             for (String wordCode : AdLibHelper.CUSTOM_WORD_CODES) {
                 wordSets.put(wordCode, new HashSet<String>(255));
             }
-            File folder = new File(_LostBooks.CONFIG_DIRECTORY, "/LostBooks/words");
+            File folder = new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks/words");
             folder.mkdirs();
             File[] wordsFiles = folder.listFiles(new ExtensionFilter(".words"));
             for (File wordsFile : wordsFiles) {
@@ -296,10 +296,10 @@ public abstract class FileHelper {
                             wordCode = AdLibHelper.checkCode(wordCode);
                             if (!AdLibHelper.CUSTOM_WORD_CODES.contains(wordCode)) {
                                 if (AdLibHelper.WORD_CODES.contains(wordCode)) {
-                                    _LostBooks.console("Words can not be added to code: " + wordCode + " (" + wordsFile.getName() + ")");
+                                    LostBooks.console("Words can not be added to code: " + wordCode + " (" + wordsFile.getName() + ")");
                                 }
                                 else if (wordCode.charAt(0) != '#') {
-                                    _LostBooks.console("Invalid word code: " + wordCode + " (" + wordsFile.getName() + ")");
+                                    LostBooks.console("Invalid word code: " + wordCode + " (" + wordsFile.getName() + ")");
                                 }
                                 wordCode = "";
                                 continue;
@@ -346,7 +346,7 @@ public abstract class FileHelper {
                 words.put(wordCode, wordList);
                 amount += wordList.length;
             }
-            _LostBooks.console("Loaded " + amount + " words!");
+            LostBooks.console("Loaded " + amount + " words!");
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -388,16 +388,16 @@ public abstract class FileHelper {
                     return bookData;
                 }
                 catch (Exception ex) {
-                    _LostBooks.console("Error reading player file! Destroying...");
+                    LostBooks.console("Error reading player file! Destroying...");
                     if (!playerFile.delete()) {
-                        _LostBooks.console("Failed to destroy player file!");
+                        LostBooks.console("Failed to destroy player file!");
                     }
                     ex.printStackTrace();
                 }
             }
         }
         catch (Exception ex) {
-            _LostBooks.console("Failed to load player book data! (" + username + ")");
+            LostBooks.console("Failed to load player book data! (" + username + ")");
             ex.printStackTrace();
         }
         return new HashSet<String>(0);
@@ -413,7 +413,7 @@ public abstract class FileHelper {
             out.close();
         }
         catch (Exception ex) {
-            _LostBooks.console("Failed to save player book data! (" + username + ")");
+            LostBooks.console("Failed to save player book data! (" + username + ")");
             ex.printStackTrace();
         }
     }
@@ -427,7 +427,7 @@ public abstract class FileHelper {
             }
         }
         catch (Exception ex) {
-            _LostBooks.console("Failed to clear player book data!");
+            LostBooks.console("Failed to clear player book data!");
             ex.printStackTrace();
         }
     }
@@ -438,7 +438,7 @@ public abstract class FileHelper {
             playerFile.delete();
         }
         catch (Exception ex) {
-            _LostBooks.console("Failed to delete player book data! (" + username + ")");
+            LostBooks.console("Failed to delete player book data! (" + username + ")");
             ex.printStackTrace();
         }
     }

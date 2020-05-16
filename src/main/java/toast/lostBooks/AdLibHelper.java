@@ -54,45 +54,45 @@ public abstract class AdLibHelper {
         if (AdLibHelper.CUSTOM_WORD_CODES.contains(wordCode)) {
             String[] wordArray = AdLibHelper.WORDS.get(wordCode);
             if (wordArray.length > 0)
-                return AdLibHelper.cap(cap, wordArray[_LostBooks.random.nextInt(wordArray.length)]);
+                return AdLibHelper.cap(cap, wordArray[LostBooks.random.nextInt(wordArray.length)]);
         }
         else if (AdLibHelper.SPECIAL_WORD_CODES.contains(wordCode) && entity != null) {
             if (wordCode.equals("entity"))
-                return AdLibHelper.cap(cap, entity.getCommandSenderName());
+                return AdLibHelper.cap(cap, entity.getCommandSenderEntity().getName());
             String[] code = wordCode.split("\\.");
             if (code[0].equals("random")) {
                 if (code[1].equals("number"))
-                    return Integer.toString(_LostBooks.random.nextInt(9) + 1);
+                    return Integer.toString(LostBooks.random.nextInt(9) + 1);
                 else if (code[1].equals("digit"))
-                    return Integer.toString(_LostBooks.random.nextInt(10));
+                    return Integer.toString(LostBooks.random.nextInt(10));
                 else if (code[1].equals("letter"))
-                    return Integer.toString(_LostBooks.random.nextInt(26) + 10, 36);
+                    return Integer.toString(LostBooks.random.nextInt(26) + 10, 36);
                 else if (code[1].equals("color")) {
                     if (code.length > 2) {
-                        int color = _LostBooks.random.nextInt(12);
+                        int color = LostBooks.random.nextInt(12);
                         return "\u00a7" + Integer.toString(color < 10 ? color : color + 2, 16);
                     }
-                    return "\u00a7" + Integer.toString(_LostBooks.random.nextInt(16), 16);
+                    return "\u00a7" + Integer.toString(LostBooks.random.nextInt(16), 16);
                 }
                 else if (code[1].equals("format")) {
                     if (code.length > 2)
-                        return "\u00a7" + Integer.toString(_LostBooks.random.nextInt(4) + 21, 36);
-                    return "\u00a7" + Integer.toString(_LostBooks.random.nextInt(5) + 20, 36);
+                        return "\u00a7" + Integer.toString(LostBooks.random.nextInt(4) + 21, 36);
+                    return "\u00a7" + Integer.toString(LostBooks.random.nextInt(5) + 20, 36);
                 }
             }
             else if (code[0].equals("world")) {
                 if (code.length > 1 && code[1].equals("dimension"))
-                    return AdLibHelper.cap(cap, entity.worldObj.provider.getDimensionName());
-                return AdLibHelper.cap(cap, entity.worldObj.getWorldInfo().getWorldName());
+                    return AdLibHelper.cap(cap, entity.world.provider.getDimensionType().getName()); // TODO might be wrong?
+                return AdLibHelper.cap(cap, entity.world.getWorldInfo().getWorldName());
             }
             else {
                 try {
                     ArrayList<Entity> entityList;
                     if (code[0].equals("player")) {
-                        entityList = (ArrayList<Entity>) ((ArrayList) entity.worldObj.playerEntities).clone();
+                        entityList = (ArrayList<Entity>) ((ArrayList) entity.world.playerEntities).clone();
                     }
                     else {
-                        entityList = (ArrayList<Entity>) ((ArrayList) entity.worldObj.loadedEntityList).clone();
+                        entityList = (ArrayList<Entity>) ((ArrayList) entity.world.loadedEntityList).clone();
                         for (Iterator<Entity> itr = entityList.iterator(); itr.hasNext();)
                             if (!AdLibHelper.isAppropriate(code[0], itr.next())) {
                                 itr.remove();
@@ -102,9 +102,9 @@ public abstract class AdLibHelper {
                     if (!entityList.isEmpty()) {
                         Entity target = null;
                         if (code[1].equals("random")) {
-                            target = entityList.get(_LostBooks.random.nextInt(entityList.size()));
+                            target = entityList.get(LostBooks.random.nextInt(entityList.size()));
                             if (target != null)
-                                return AdLibHelper.cap(cap, target.getCommandSenderName());
+                                return AdLibHelper.cap(cap, target.getCommandSenderEntity().getName());
                         }
                         else if (code[1].equals("nearest")) {
                             Entity other = null;
@@ -112,7 +112,7 @@ public abstract class AdLibHelper {
                             double nextClosest = Double.POSITIVE_INFINITY;
                             double distance;
                             for (Entity testEntity : entityList) {
-                                distance = entity.getDistanceSqToEntity(testEntity);
+                                distance = entity.getDistanceSq(testEntity);
                                 if (distance < closest) {
                                     nextClosest = closest;
                                     closest = distance;
@@ -126,10 +126,10 @@ public abstract class AdLibHelper {
                             }
                             if (code.length > 2 && code[2].equals("other")) {
                                 if (other != null)
-                                    return AdLibHelper.cap(cap, other.getCommandSenderName());
+                                    return AdLibHelper.cap(cap, other.getCommandSenderEntity().getName());
                             }
                             else if (target != null)
-                                return AdLibHelper.cap(cap, target.getCommandSenderName());
+                                return AdLibHelper.cap(cap, target.getCommandSenderEntity().getName());
                         }
                     }
                 }
@@ -160,7 +160,7 @@ public abstract class AdLibHelper {
 
     /// Capitalizes the string if true. Otherwise, does nothing.
     private static String cap(boolean cap, String value) {
-        return cap ? _LostBooks.cap(value) : value;
+        return cap ? LostBooks.cap(value) : value;
     }
 
     /// Returns true if the entity should be considered.
@@ -180,8 +180,8 @@ public abstract class AdLibHelper {
     public static String mash() {
         String[] parts = { "cree", "per", "skel", "e", "ton", "zom", "bie", "spi", "der", "bla", "per", "the", "na", "ra", "a", "i", "o", "u", "do", "pa", "queb", "pin", "goo", "ball", "tall", "fu", "crab", "poo", "han", "so", "lo", "star", "me", "yo", "boo", "we", "jam", "ka", "tha", "che", "cha", "vu", "jack", "ed", "va", "ny", "she", "he", "ro", "bri", "ne", "fa", "ther", "to", "ast", "zap", "pick", "ax", "sho", "vel", "swo", "rd", "bow", "ar", "row", "arm", "or", "pump", "kin" };
         String word = "";
-        for (int syl = 2 + (_LostBooks.random.nextInt(3) == 0 ? 0 : _LostBooks.random.nextInt(3)); syl-- > 0;) {
-            word += parts[_LostBooks.random.nextInt(parts.length)];
+        for (int syl = 2 + (LostBooks.random.nextInt(3) == 0 ? 0 : LostBooks.random.nextInt(3)); syl-- > 0;) {
+            word += parts[LostBooks.random.nextInt(parts.length)];
         }
         return word;
     }

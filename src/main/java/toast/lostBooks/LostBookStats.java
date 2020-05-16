@@ -23,7 +23,7 @@ public class LostBookStats extends BookStats {
             }
         }
         catch (Exception ex) {
-            _LostBooks.console("Failed to load lost book!");
+            LostBooks.console("Failed to load lost book!");
             ex.printStackTrace();
         }
     }
@@ -32,8 +32,8 @@ public class LostBookStats extends BookStats {
     @Override
     public ItemStack writeTo(ItemStack book) {
         if (this.bookTag != null) {
-            book.readFromNBT(this.bookTag);
-        }
+			book.writeToNBT(bookTag); // book.readFromNBT(this.bookTag);
+		}
         this.bookFile.delete();
         return book;
     }

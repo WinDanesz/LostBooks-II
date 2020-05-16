@@ -13,15 +13,15 @@ public class TextHelper {
     static {
         try {
             FileInputStream in;
-            in = new FileInputStream(new File(_LostBooks.CONFIG_DIRECTORY, "/LostBooks/charWidths.bin"));
+            in = new FileInputStream(new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks/charWidths.bin"));
             in.read(TextHelper.charWidth);
             in.close();
-            in = new FileInputStream(new File(_LostBooks.CONFIG_DIRECTORY, "/LostBooks/glyphWidths.bin"));
+            in = new FileInputStream(new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks/glyphWidths.bin"));
             in.read(TextHelper.glyphWidth);
             in.close();
         }
         catch (Exception ex) {
-            _LostBooks.console("Error reading font widths! @" + ex.getClass().getName());
+            LostBooks.console("Error reading font widths! @" + ex.getClass().getName());
         }
     }
 
