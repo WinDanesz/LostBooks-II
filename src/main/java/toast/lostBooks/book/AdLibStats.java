@@ -1,4 +1,4 @@
-package toast.lostBooks;
+package toast.lostBooks.book;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,6 +6,9 @@ import java.util.HashSet;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import toast.lostBooks.BookProperties;
+import toast.lostBooks.helper.AdLibHelper;
+import toast.lostBooks.helper.BookHelper;
 
 public class AdLibStats implements IBook {
     /// The file for this ad lib.

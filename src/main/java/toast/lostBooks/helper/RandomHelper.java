@@ -1,7 +1,9 @@
-package toast.lostBooks;
+package toast.lostBooks.helper;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import toast.lostBooks.book.IBook;
+import toast.lostBooks.LostBooks;
 
 public abstract class RandomHelper {
     /// Randomly chooses a valid book from what is given.

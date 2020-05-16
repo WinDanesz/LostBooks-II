@@ -1,5 +1,6 @@
 //package toast.lostBooks.client;
 //
+//import com.mojang.realmsclient.gui.ChatFormatting;
 //import io.netty.buffer.ByteBuf;
 //import io.netty.buffer.Unpooled;
 //import net.minecraft.client.Minecraft;
@@ -16,7 +17,7 @@
 //import net.minecraft.network.PacketBuffer;
 ////import net.minecraft.network.play.client.C17PacketCustomPayload;
 //import net.minecraft.util.ChatAllowedCharacters;
-////import net.minecraft.util.EnumChatFormatting;
+////import net.minecraft.util.ChatFormatting;
 //import net.minecraft.util.ResourceLocation;
 //
 //import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -27,9 +28,12 @@
 //import org.lwjgl.input.Keyboard;
 //import org.lwjgl.opengl.GL11;
 //
-//import toast.lostBooks.BookHelper;
+//import toast.lostBooks.MessageCurrPage;
+//import toast.lostBooks.helper.BookHelper;
 ////import toast.lostBooks.MessageCurrPage; TODO readd
 //import toast.lostBooks.LostBooks;
+//
+//import java.io.IOException;
 //
 //@SideOnly(Side.CLIENT)
 //public class GuiScreenBookUtil extends GuiScreen {
@@ -177,7 +181,7 @@
 //                    s = "MC|BSign";
 //                    this.bookObj.setTagInfo("author", new NBTTagString(this.editingPlayer.getCommandSenderEntity().getName()));
 //                    this.bookObj.setTagInfo("title", new NBTTagString(this.bookTitle.trim()));
-//                    this.bookObj.func_150996_a(Items.written_book);
+//                    this.bookObj.func_150996_a(Items.WRITTEN_BOOK);
 //                }
 //
 //                ByteBuf bytebuf = Unpooled.buffer();
@@ -242,7 +246,7 @@
 //        if (this.lastCurrPage != this.currPage) {
 //            this.lastCurrPage = this.currPage;
 //            BookHelper.setCurrentPage(this.bookObj, this.currPage);
-//            _LostBooks.CHANNEL.sendToServer(new MessageCurrPage(this.currPage));
+//            LostBooks.CHANNEL.sendToServer(new MessageCurrPage(this.currPage));
 //        }
 //    }
 //
@@ -258,8 +262,8 @@
 //     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
 //     */
 //    @Override
-//    protected void keyTyped(char p_73869_1_, int p_73869_2_) {
-//        super.keyTyped(p_73869_1_, p_73869_2_);
+//    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+//        super.keyTyped(typedChar, keyCode);
 //
 //        if (this.bookIsUnsigned) {
 //            if (this.settingTitle) {
@@ -341,7 +345,7 @@
 //    private void func_146459_b(String p_146459_1_) {
 //        String s1 = this.func_146456_p();
 //        String s2 = s1 + p_146459_1_;
-//        int i = this.fontRendererObj.splitStringWidth(s2 + "" + EnumChatFormatting.BLACK + "_", 118);
+//        int i = this.fontRenderer.splitStringWidth(s2 + "" + For.BLACK + "_", 118);
 //
 //        if (i <= 118 && s2.length() < 256) {
 //            this.func_146457_a(s2);
@@ -367,23 +371,23 @@
 //
 //            if (this.bookIsUnsigned) {
 //                if (this.updateCount / 6 % 2 == 0) {
-//                    s = s + "" + EnumChatFormatting.BLACK + "_";
+//                    s = s + "" + ChatFormatting.BLACK + "_";
 //                }
 //                else {
-//                    s = s + "" + EnumChatFormatting.GRAY + "_";
+//                    s = s + "" + ChatFormatting.GRAY + "_";
 //                }
 //            }
 //
 //            s1 = I18n.format("book.editTitle", new Object[0]);
-//            l = this.fontRendererObj.getStringWidth(s1);
-//            this.fontRendererObj.drawString(s1, k + 36 + (116 - l) / 2, b0 + 16 + 16, 0);
-//            int i1 = this.fontRendererObj.getStringWidth(s);
-//            this.fontRendererObj.drawString(s, k + 36 + (116 - i1) / 2, b0 + 48, 0);
-//            String s2 = I18n.format("book.byAuthor", new Object[] { this.editingPlayer.getCommandSenderName() });
-//            int j1 = this.fontRendererObj.getStringWidth(s2);
-//            this.fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + s2, k + 36 + (116 - j1) / 2, b0 + 48 + 10, 0);
+//            l = this.fontRenderer.getStringWidth(s1);
+//            this.fontRenderer.drawString(s1, k + 36 + (116 - l) / 2, b0 + 16 + 16, 0);
+//            int i1 = this.fontRenderer.getStringWidth(s);
+//            this.fontRenderer.drawString(s, k + 36 + (116 - i1) / 2, b0 + 48, 0);
+//            String s2 = I18n.format("book.byAuthor", new Object[] { this.editingPlayer.getCommandSenderEntity().getName() });
+//            int j1 = this.fontRenderer.getStringWidth(s2);
+//            this.fontRenderer.drawString(ChatFormatting.DARK_GRAY + s2, k + 36 + (116 - j1) / 2, b0 + 48 + 10, 0);
 //            String s3 = I18n.format("book.finalizeWarning", new Object[0]);
-//            this.fontRendererObj.drawSplitString(s3, k + 36, b0 + 80, 116, 0);
+//            this.fontRenderer.drawSplitString(s3, k + 36, b0 + 80, 116, 0);
 //        }
 //        else {
 //            s = I18n.format("book.pageIndicator", new Object[] { Integer.valueOf(this.currPage + 1), Integer.valueOf(this.bookTotalPages) });
@@ -394,20 +398,20 @@
 //            }
 //
 //            if (this.bookIsUnsigned) {
-//                if (this.fontRendererObj.getBidiFlag()) {
+//                if (this.fontRenderer.getBidiFlag()) {
 //                    s1 = s1 + "_";
 //                }
 //                else if (this.updateCount / 6 % 2 == 0) {
-//                    s1 = s1 + "" + EnumChatFormatting.BLACK + "_";
+//                    s1 = s1 + "" + ChatFormatting.BLACK + "_";
 //                }
 //                else {
-//                    s1 = s1 + "" + EnumChatFormatting.GRAY + "_";
+//                    s1 = s1 + "" + ChatFormatting.GRAY + "_";
 //                }
 //            }
 //
-//            l = this.fontRendererObj.getStringWidth(s);
-//            this.fontRendererObj.drawString(s, k - l + this.bookImageWidth - 44, b0 + 16, 0);
-//            this.fontRendererObj.drawSplitString(s1, k + 36, b0 + 16 + 16, 116, 0);
+//            l = this.fontRenderer.getStringWidth(s);
+//            this.fontRenderer.drawString(s, k - l + this.bookImageWidth - 44, b0 + 16, 0);
+//            this.fontRenderer.drawSplitString(s1, k + 36, b0 + 16 + 16, 116, 0);
 //        }
 //
 //        super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
@@ -426,11 +430,11 @@
 //         * Draws this button to the screen.
 //         */
 //        @Override
-//        public void drawButton(Minecraft p_146112_1_, int p_146112_2_, int p_146112_3_) {
+//        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
 //            if (this.visible) {
-//                boolean flag = p_146112_2_ >= this.xPosition && p_146112_3_ >= this.yPosition && p_146112_2_ < this.xPosition + this.width && p_146112_3_ < this.yPosition + this.height;
+//                boolean flag = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 //                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//                p_146112_1_.getTextureManager().bindTexture(GuiScreenBookUtil.bookGuiTextures);
+//                mc.getTextureManager().bindTexture(GuiScreenBookUtil.bookGuiTextures);
 //                int k = 0;
 //                int l = 192;
 //
@@ -442,7 +446,7 @@
 //                    l += 13;
 //                }
 //
-//                this.drawTexturedModalRect(this.xPosition, this.yPosition, k, l, 23, 13);
+//                this.drawTexturedModalRect(this.x, this.y, k, l, 23, 13);
 //            }
 //        }
 //    }

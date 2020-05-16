@@ -1,4 +1,4 @@
-package toast.lostBooks;
+package toast.lostBooks.helper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +13,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
+import toast.lostBooks.book.BookStats;
+import toast.lostBooks.Library;
+import toast.lostBooks.LostBooks;
+import toast.lostBooks.TextHelper;
 
 public abstract class AdLibHelper {
     /// The word codes that are determined by words files.

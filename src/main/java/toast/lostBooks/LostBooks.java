@@ -3,6 +3,7 @@ package toast.lostBooks;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -11,6 +12,8 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import toast.lostBooks.helper.FileHelper;
+import toast.lostBooks.helper.PropertyHelper;
 
 import java.io.File;
 import java.util.Random;
@@ -46,11 +49,8 @@ public class LostBooks {
             > Random spellbooks
      \* ** ** */
 
-	// This mod's displayed name.
 	public static final String NAME = "Lost Books II";
-	// This mod's id.
 	public static final String MODID = "lostbooks";
-	// This mod's version.
 	public static final String VERSION = "2.0.0";
 	public static final String MC_VERSION = "[1.12.2]";
 
@@ -68,6 +68,10 @@ public class LostBooks {
 	// The actual configurations.
 	public static Configuration CONFIG;
 
+	// Location of the proxy code, used by Forge.
+	@SidedProxy(clientSide = "toast.lostBooks.client.ClientProxy", serverSide = "toast.lostBooks.CommonProxy")
+	public static CommonProxy proxy;
+
 	// Called before initialization. Loads the properties/configurations.
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -75,7 +79,7 @@ public class LostBooks {
 
 		LostBooks.CONFIG_DIRECTORY = event.getModConfigurationDirectory();
 		LostBooks.CONFIG = new Configuration(event.getSuggestedConfigurationFile());
-		Properties.init(LostBooks.CONFIG);
+		PropertyHelper.init(LostBooks.CONFIG);
 
 		LostBooks.CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel("LB|CP");
 		LostBooks.CHANNEL.registerMessage(MessageCurrPage.Handler.class, MessageCurrPage.class, 0, Side.SERVER);
@@ -86,13 +90,13 @@ public class LostBooks {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		proxy.registerVillagerTrades();
+
 	// TODO: re-add the loot injection
-//		new EventHandler();
 //		if (event.getSide() == Side.CLIENT) {
 //			new ClientEventHandler();
 //		}
 //		new TickHandler();
-//		new TradeHandler();
 //		if (Properties.getBoolean(Properties.GENERAL, "addChestLoot")) {
 //			ItemStack book = new ItemStack(LostBooks.randomBook, 1, 0);
 //			WeightedRandomChestContent tmp = new WeightedRandomChestContent(book, 1, 1, 2);

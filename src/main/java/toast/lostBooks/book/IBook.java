@@ -1,4 +1,4 @@
-package toast.lostBooks;
+package toast.lostBooks.book;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

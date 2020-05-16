@@ -1,4 +1,4 @@
-package toast.lostBooks;
+package toast.lostBooks.helper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,8 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import toast.lostBooks.Blackouts;
+import toast.lostBooks.TickHandler;
 
 public abstract class BookHelper {
     /// Returns true if the book has a book id.

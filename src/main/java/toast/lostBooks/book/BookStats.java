@@ -1,11 +1,13 @@
-package toast.lostBooks;
+package toast.lostBooks.book;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import scala.util.parsing.json.JSONObject;
+import toast.lostBooks.Blackouts;
+import toast.lostBooks.BookProperties;
+import toast.lostBooks.helper.BookHelper;
 
 import java.io.File;
 import java.util.ArrayList;

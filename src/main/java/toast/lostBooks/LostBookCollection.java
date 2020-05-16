@@ -10,6 +10,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import toast.lostBooks.book.BookStats;
+import toast.lostBooks.book.IBook;
+import toast.lostBooks.helper.BookHelper;
+import toast.lostBooks.helper.FileHelper;
+import toast.lostBooks.helper.PropertyHelper;
+import toast.lostBooks.helper.RandomHelper;
 
 public class LostBookCollection implements IBook {
     /// Form Feed [FF]. Char value is 12.
@@ -111,7 +117,7 @@ public class LostBookCollection implements IBook {
     /// Returns true if any books can be dropped by the entity.
     @Override
     public boolean isValid(EntityLivingBase entity) {
-        return this.getWeight() > 0 && this.size() > 0 && BookHelper.canBookDrop(entity, BookProperties.getEntityList("LostBooks.cfg", Properties.getString(Properties.LOST_BOOKS, "whitelist")), BookProperties.getEntityList("LostBooks.cfg", Properties.getString(Properties.LOST_BOOKS, "blacklist")), BookProperties.getIdSet("LostBooks.cfg", Properties.getString(Properties.LOST_BOOKS, "biomes")));
+        return this.getWeight() > 0 && this.size() > 0 && BookHelper.canBookDrop(entity, BookProperties.getEntityList("LostBooks.cfg", PropertyHelper.getString(PropertyHelper.LOST_BOOKS, "whitelist")), BookProperties.getEntityList("LostBooks.cfg", PropertyHelper.getString(PropertyHelper.LOST_BOOKS, "blacklist")), BookProperties.getIdSet("LostBooks.cfg", PropertyHelper.getString(PropertyHelper.LOST_BOOKS, "biomes")));
     }
 
     /// Returns true if any books can be spawned for the player (including looted dusty books).
@@ -129,7 +135,7 @@ public class LostBookCollection implements IBook {
     /// Returns the weight of this object.
     @Override
     public int getWeight() {
-        return Properties.getInt(Properties.GENERAL, "lostBookWeight");
+        return PropertyHelper.getInt(PropertyHelper.GENERAL, "lostBookWeight");
     }
 
     /// Returns the number of stories included in this book.

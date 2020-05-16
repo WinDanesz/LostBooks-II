@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import toast.lostBooks.book.BookStats;
 
 public class LostBookStats extends BookStats {
     /// The book's file.

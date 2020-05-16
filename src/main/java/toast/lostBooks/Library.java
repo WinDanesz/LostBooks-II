@@ -8,6 +8,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import toast.lostBooks.book.BookCollection;
+import toast.lostBooks.book.BookStats;
+import toast.lostBooks.book.IBook;
+import toast.lostBooks.helper.BookHelper;
+import toast.lostBooks.helper.PropertyHelper;
+import toast.lostBooks.helper.RandomHelper;
 
 public abstract class Library {
     /// Line Feed [LF]. Normally typed with \n.
@@ -43,7 +49,7 @@ public abstract class Library {
                         story = category.getBookStats(entity);
                     }
                 }
-                else if (Properties.getBoolean(Properties.GENERAL, "markUnique")) {
+                else if (PropertyHelper.getBoolean(PropertyHelper.GENERAL, "markUnique")) {
                     BookHelper.addItemText(book, "\u00a79Unique");
                 }
             }
@@ -69,7 +75,7 @@ public abstract class Library {
                         story = category.getBookStatsSpawn(player);
                     }
                 }
-                else if (Properties.getBoolean(Properties.GENERAL, "markUnique")) {
+                else if (PropertyHelper.getBoolean(PropertyHelper.GENERAL, "markUnique")) {
                     BookHelper.addItemText(book, "\u00a79Unique");
                 }
             }
@@ -82,20 +88,20 @@ public abstract class Library {
         return null;
     }
 
-    /// Returns the next book for a villager's trade inventory.
-    public static ItemStack nextTradeBook(EntityLivingBase entity) {
+    /// Returns the next book for a villager's trade inventory. customer is usually the player
+    public static ItemStack nextTradeBook(EntityLivingBase customer) {
         ArrayList<IBook> tradeableBooks = new ArrayList<IBook>(4);
         tradeableBooks.add(Library.COMMON_BOOKS);
         tradeableBooks.add(Library.AD_LIB_BOOKS);
-        if (Properties.getBoolean(Properties.TRADING, "sellUnique")) {
+        if (PropertyHelper.getBoolean(PropertyHelper.TRADING, "sellUnique")) {
             tradeableBooks.add(Library.UNIQUE_BOOKS);
         }
-        if (Properties.getBoolean(Properties.TRADING, "sellLost")) {
+        if (PropertyHelper.getBoolean(PropertyHelper.TRADING, "sellLost")) {
             tradeableBooks.add(Library.LOST_BOOKS);
         }
-        IBook category = RandomHelper.chooseTrade(entity, tradeableBooks.toArray(new IBook[0]));
+        IBook category = RandomHelper.chooseTrade(customer, tradeableBooks.toArray(new IBook[0]));
         if (category != null) {
-            BookStats story = category.getBookStatsTrade(entity);
+            BookStats story = category.getBookStatsTrade(customer);
             if (story != null) {
                 ItemStack book = story.writeTo(new ItemStack(Items.WRITTEN_BOOK));
                 BookHelper.removeBookId(book);

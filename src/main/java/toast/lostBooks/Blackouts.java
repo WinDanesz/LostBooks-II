@@ -6,11 +6,13 @@ import java.util.Iterator;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import toast.lostBooks.helper.BookHelper;
+import toast.lostBooks.helper.PropertyHelper;
 
 public class Blackouts {
     // Properties stored for easy access.
-    public static final boolean DROP_BLACKOUTS = Properties.getBoolean(Properties.GENERAL, "uniqueBlackouts");
-    public static final boolean ADAPTIVE_DROPS = Properties.getBoolean(Properties.GENERAL, "adaptiveDrops");
+    public static final boolean DROP_BLACKOUTS = PropertyHelper.getBoolean(PropertyHelper.GENERAL, "uniqueBlackouts");
+    public static final boolean ADAPTIVE_DROPS = PropertyHelper.getBoolean(PropertyHelper.GENERAL, "adaptiveDrops");
 
     // Set of all book ids that have been blacked out.
     private final HashSet<String> blackouts;
