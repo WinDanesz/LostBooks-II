@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import toast.lostBooks.Blackouts;
 import toast.lostBooks.BookProperties;
+import toast.lostBooks.LostBooks;
 import toast.lostBooks.helper.BookHelper;
 
 import java.io.File;
@@ -85,7 +86,7 @@ public class BookStats implements IBook {
 			JsonObject json = new JsonObject();
 			json.addProperty("text", page);
 			pages[y] = new Gson().toJson(json);
-//			LostBooks.debugConsole(pages[y]);
+			LostBooks.debugConsole(pages[y]);
 			y++;
 		}
 

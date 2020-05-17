@@ -25,15 +25,6 @@ public class ItemRandomBook extends Item {
 		setMaxStackSize(16);
 	}
 
-	//TODO
-	//		LostBooks.randomBook = new ItemRandomBook().setUnlocalizedName("randomBook").setCreativeTab(CreativeTabs.tabMisc).setTextureName("book_written").setMaxStackSize(16);
-	//		GameRegistry.registerItem(LostBooks.randomBook, LostBooks.randomBook.getUnlocalizedName().substring(5));
-
-
-	/**
-	 * Allows items to add custom lines of information to the mouseover description.
-	 */
-
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);

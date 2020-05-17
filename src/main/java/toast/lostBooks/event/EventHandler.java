@@ -1,4 +1,4 @@
-package toast.lostBooks;
+package toast.lostBooks.event;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -7,15 +7,25 @@ import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority; //import cpw.mods.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent; //import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import toast.lostBooks.Blackouts;
+import toast.lostBooks.Library;
+import toast.lostBooks.LostBooks;
+import toast.lostBooks.TickHandler;
 import toast.lostBooks.helper.BookHelper;
 import toast.lostBooks.helper.PropertyHelper;
 
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class EventHandler {
-    public EventHandler() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
+
+    public EventHandler(){}
+
+//    public EventHandler() {
+//        MinecraftForge.EVENT_BUS.register(this);
+//    }
 
     /**
      * Called by EntityLiving.onDeath().

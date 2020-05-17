@@ -1,6 +1,5 @@
 package toast.lostBooks.registry;
 
-import net.minecraft.block.BlockDispenser;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;

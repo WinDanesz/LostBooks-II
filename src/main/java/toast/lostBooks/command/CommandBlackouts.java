@@ -1,9 +1,9 @@
-//package toast.lostBooks;
+//package toast.lostBooks.command;
 //
 //import net.minecraft.command.CommandBase;
 //import net.minecraft.command.ICommandSender;
 //import net.minecraft.entity.player.EntityPlayerMP;
-//import net.minecraft.util.ChatComponentText;
+//import toast.lostBooks.helper.FileHelper;
 //
 //public class CommandBlackouts extends CommandBase {
 //    /// The command name.

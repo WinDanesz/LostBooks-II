@@ -1,6 +1,7 @@
 package toast.lostBooks;
 
 import net.minecraft.command.ServerCommandManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -12,6 +13,7 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import toast.lostBooks.client.ClientEventHandler;
 import toast.lostBooks.helper.FileHelper;
 import toast.lostBooks.helper.PropertyHelper;
 
@@ -92,7 +94,8 @@ public class LostBooks {
 	public void init(FMLInitializationEvent event) {
 		proxy.registerVillagerTrades();
 
-	// TODO: re-add the loot injection
+
+		// TODO: re-add the loot injection
 //		if (event.getSide() == Side.CLIENT) {
 //			new ClientEventHandler();
 //		}
