@@ -1,20 +1,27 @@
 package toast.lostBooks.gui;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import com.google.common.collect.Lists;
+import com.google.gson.JsonParseException;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenBook;
+import net.minecraft.client.gui.GuiUtilRenderComponents;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemWrittenBook;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,48 +34,53 @@ import toast.lostBooks.LostBooks;
 import toast.lostBooks.MessageCurrPage;
 import toast.lostBooks.helper.BookHelper;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenBookUtil extends GuiScreen {
 	private static final Logger logger = LogManager.getLogger();
-	public static final ResourceLocation bookGuiTextures = new ResourceLocation("textures/gui/book.png");
-	public final boolean pauseGame;
+	private static final ResourceLocation bookGuiTextures = new ResourceLocation("textures/gui/book.png");
+	public final ItemStack book;
+	private final boolean pauseGame;
 	/**
 	 * The player editing the book
 	 */
-	public final EntityPlayer editingPlayer;
-	public final ItemStack book;
+	private final EntityPlayer editingPlayer;
 	/**
 	 * Whether the book is signed or can still be edited
 	 */
-	public final boolean bookIsUnsigned;
-	public boolean hasUpdated;
-	public boolean settingTitle;
+	private final boolean bookIsUnsigned;
+	private final int bookImageWidth = 192;
+	private boolean bookIsModified;
+	private int cachedPage = -1;
 	/**
 	 * Update ticks since the gui was opened
 	 */
-	public int updateCount;
-	public final int bookImageWidth = 192;
+	private int updateCount;
 	public final int bookImageHeight = 192;
-	public int bookTotalPages = 1;
-	public int currPage, lastCurrPage;
-	public NBTTagList bookPages;
-	public String bookTitle = "";
-	public NextPageButton buttonNextPage;
-	public NextPageButton buttonPreviousPage;
-	public GuiButton buttonDone;
+	private int bookTotalPages = 1;
+	private int currPage, lastCurrPage;
+	private NBTTagList bookPages;
+	private String bookTitle = "";
+	private NextPageButton buttonNextPage;
+	private NextPageButton buttonPreviousPage;
+	private GuiButton buttonDone;
 	/**
-	 * The GuiButton to sign this book.
+	 * Determines if the signing screen is open
 	 */
-	public GuiButton buttonSign;
-	public GuiButton buttonFinalize;
+	private boolean bookGettingSigned;
+	private GuiButton buttonSign;
+	private GuiButton buttonFinalize;
 	public GuiButton buttonCancel;
+	private List<ITextComponent> cachedComponents;
 
 	public GuiScreenBookUtil(GuiScreenBook parentScreen, boolean bookmark, boolean pauseGame) {
-		this.editingPlayer = ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "field_146468_g", "editingPlayer");
-		this.book = ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "field_146474_h", "book");
-		this.bookIsUnsigned = ((Boolean) ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "field_146475_i", "bookIsUnsigned")).booleanValue();
+		this.editingPlayer = ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "editingPlayer");
+		this.book = ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "book");
+		this.bookIsUnsigned = ((Boolean) ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "bookIsUnsigned")).booleanValue();
+		this.bookGettingSigned = ((Boolean) ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "bookGettingSigned")).booleanValue();
 		this.pauseGame = pauseGame;
 
 		if (this.book.hasTagCompound()) {
@@ -76,7 +88,7 @@ public class GuiScreenBookUtil extends GuiScreen {
 			this.bookPages = nbttagcompound.getTagList("pages", 8);
 
 			if (this.bookPages != null) {
-				this.bookPages = (NBTTagList) this.bookPages.copy();
+				this.bookPages = this.bookPages.copy();
 				this.bookTotalPages = this.bookPages.tagCount();
 
 				if (this.bookTotalPages < 1) {
@@ -117,12 +129,12 @@ public class GuiScreenBookUtil extends GuiScreen {
 		Keyboard.enableRepeatEvents(true);
 
 		if (this.bookIsUnsigned) {
-			this.buttonList.add(this.buttonSign = new GuiButton(3, this.width / 2 - 100, 4 + this.bookImageHeight, 98, 20, I18n.format("book.signButton", new Object[0])));
-			this.buttonList.add(this.buttonDone = new GuiButton(0, this.width / 2 + 2, 4 + this.bookImageHeight, 98, 20, I18n.format("gui.done", new Object[0])));
-			this.buttonList.add(this.buttonFinalize = new GuiButton(5, this.width / 2 - 100, 4 + this.bookImageHeight, 98, 20, I18n.format("book.finalizeButton", new Object[0])));
-			this.buttonList.add(this.buttonCancel = new GuiButton(4, this.width / 2 + 2, 4 + this.bookImageHeight, 98, 20, I18n.format("gui.cancel", new Object[0])));
+			this.buttonSign = this.addButton(new GuiButton(3, this.width / 2 - 100, 196, 98, 20, I18n.format("book.signButton")));
+			this.buttonDone = this.addButton(new GuiButton(0, this.width / 2 + 2, 196, 98, 20, I18n.format("gui.done")));
+			this.buttonFinalize = this.addButton(new GuiButton(5, this.width / 2 - 100, 196, 98, 20, I18n.format("book.finalizeButton")));
+			this.buttonCancel = this.addButton(new GuiButton(4, this.width / 2 + 2, 196, 98, 20, I18n.format("gui.cancel")));
 		} else {
-			this.buttonList.add(this.buttonDone = new GuiButton(0, this.width / 2 - 100, 4 + this.bookImageHeight, 200, 20, I18n.format("gui.done", new Object[0])));
+			this.buttonDone = this.addButton(new GuiButton(0, this.width / 2 - 100, 196, 200, 20, I18n.format("gui.done")));
 		}
 
 		int i = (this.width - this.bookImageWidth) / 2;
@@ -141,27 +153,25 @@ public class GuiScreenBookUtil extends GuiScreen {
 	}
 
 	private void updateButtons() {
-		this.buttonNextPage.visible = !this.settingTitle && (this.currPage < this.bookTotalPages - 1 || this.bookIsUnsigned);
-		this.buttonPreviousPage.visible = !this.settingTitle && this.currPage > 0;
-		this.buttonDone.visible = !this.bookIsUnsigned || !this.settingTitle;
+		this.buttonNextPage.visible = !this.bookGettingSigned && (this.currPage < this.bookTotalPages - 1 || this.bookIsUnsigned);
+		this.buttonPreviousPage.visible = !this.bookGettingSigned && this.currPage > 0;
+		this.buttonDone.visible = !this.bookIsUnsigned || !this.bookGettingSigned;
 
 		if (this.bookIsUnsigned) {
-			this.buttonSign.visible = !this.settingTitle;
-			this.buttonCancel.visible = this.settingTitle;
-			this.buttonFinalize.visible = this.settingTitle;
-			this.buttonFinalize.enabled = this.bookTitle.trim().length() > 0;
+			this.buttonSign.visible = !this.bookGettingSigned;
+			this.buttonCancel.visible = this.bookGettingSigned;
+			this.buttonFinalize.visible = this.bookGettingSigned;
+			this.buttonFinalize.enabled = !this.bookTitle.trim().isEmpty();
 		}
 	}
 
 	private void sendBookToServer(boolean publish) {
-		if (this.bookIsUnsigned && this.hasUpdated) {
+		if (this.bookIsUnsigned && this.bookIsModified) {
 			if (this.bookPages != null) {
-				String s;
-
 				while (this.bookPages.tagCount() > 1) {
-					s = this.bookPages.getStringTagAt(this.bookPages.tagCount() - 1);
+					String s = this.bookPages.getStringTagAt(this.bookPages.tagCount() - 1);
 
-					if (s.length() != 0) {
+					if (!s.isEmpty()) {
 						break;
 					}
 
@@ -175,39 +185,28 @@ public class GuiScreenBookUtil extends GuiScreen {
 					this.book.setTagInfo("pages", this.bookPages);
 				}
 
-				s = "MC|BEdit";
+				String s1 = "MC|BEdit";
 
 				if (publish) {
-					s = "MC|BSign";
+					s1 = "MC|BSign";
 					this.book.setTagInfo("author", new NBTTagString(this.editingPlayer.getName()));
 					this.book.setTagInfo("title", new NBTTagString(this.bookTitle.trim()));
-					//                    this.book.func_150996_a(Items.WRITTEN_BOOK);
 				}
 
-				//                ByteBuf bytebuf = Unpooled.buffer();
-
-				try {
-					PacketBuffer packetbuffer = new PacketBuffer(Unpooled.buffer());
-					packetbuffer.writeItemStack(this.book);
-				}
-				catch (Exception exception) {
-					GuiScreenBookUtil.logger.error("Couldn\'t send book info", exception);
-				}
-				//                finally {
-				//                    bytebuf.release();
-				//                }
+				PacketBuffer packetbuffer = new PacketBuffer(Unpooled.buffer());
+				packetbuffer.writeItemStack(this.book);
+				this.mc.getConnection().sendPacket(new CPacketCustomPayload(s1, packetbuffer));
 			}
 		}
 	}
 
-	@Override
-	protected void actionPerformed(GuiButton button) {
+	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button.enabled) {
 			if (button.id == 0) {
-				this.mc.displayGuiScreen((GuiScreen) null);
+				this.mc.displayGuiScreen(null);
 				this.sendBookToServer(false);
 			} else if (button.id == 3 && this.bookIsUnsigned) {
-				this.settingTitle = true;
+				this.bookGettingSigned = true;
 			} else if (button.id == 1) {
 				if (this.currPage < this.bookTotalPages - 1) {
 					++this.currPage;
@@ -218,17 +217,18 @@ public class GuiScreenBookUtil extends GuiScreen {
 						++this.currPage;
 					}
 				}
+
 				this.updateAndSendCurrPage();
 			} else if (button.id == 2) {
 				if (this.currPage > 0) {
 					--this.currPage;
 					this.updateAndSendCurrPage();
 				}
-			} else if (button.id == 5 && this.settingTitle) {
+			} else if (button.id == 5 && this.bookGettingSigned) {
 				this.sendBookToServer(true);
-				this.mc.displayGuiScreen((GuiScreen) null);
-			} else if (button.id == 4 && this.settingTitle) {
-				this.settingTitle = false;
+				this.mc.displayGuiScreen(null);
+			} else if (button.id == 4 && this.bookGettingSigned) {
+				this.bookGettingSigned = false;
 			}
 
 			this.updateButtons();
@@ -248,7 +248,7 @@ public class GuiScreenBookUtil extends GuiScreen {
 		if (this.bookPages != null && this.bookPages.tagCount() < 50) {
 			this.bookPages.appendTag(new NBTTagString(""));
 			++this.bookTotalPages;
-			this.hasUpdated = true;
+			this.bookIsModified = true;
 		}
 	}
 
@@ -260,7 +260,7 @@ public class GuiScreenBookUtil extends GuiScreen {
 		super.keyTyped(typedChar, keyCode);
 
 		if (this.bookIsUnsigned) {
-			if (this.settingTitle) {
+			if (this.bookGettingSigned) {
 				this.keyTypedInTitle(typedChar, keyCode);
 			} else {
 				this.keyTypedInBook(typedChar, keyCode);
@@ -272,38 +272,38 @@ public class GuiScreenBookUtil extends GuiScreen {
 	 * Processes keystrokes when editing the text of a book
 	 */
 	private void keyTypedInBook(char typedChar, int keyCode) {
-		switch (typedChar) {
-			case 22:
-				this.pageInsertIntoCurrent(GuiScreen.getClipboardString());
-				return;
-			default:
-				switch (keyCode) {
-					case 14:
-						String s = this.pageGetCurrent();
+		if (GuiScreen.isKeyComboCtrlV(keyCode)) {
+			this.pageInsertIntoCurrent(GuiScreen.getClipboardString());
+		} else {
+			switch (keyCode) {
+				case 14:
+					String s = this.pageGetCurrent();
 
-						if (s.length() > 0) {
-							this.pageSetCurrent(s.substring(0, s.length() - 1));
-						}
+					if (!s.isEmpty()) {
+						this.pageSetCurrent(s.substring(0, s.length() - 1));
+					}
 
-						return;
-					case 28:
-					case 156:
-						this.pageInsertIntoCurrent("\n");
-						return;
-					default:
-						if (ChatAllowedCharacters.isAllowedCharacter(typedChar)) {
-							this.pageInsertIntoCurrent(Character.toString(typedChar));
-						}
-				}
+					return;
+				case 28:
+				case 156:
+					this.pageInsertIntoCurrent("\n");
+					return;
+				default:
+
+					if (ChatAllowedCharacters.isAllowedCharacter(typedChar)) {
+						this.pageInsertIntoCurrent(Character.toString(typedChar));
+					}
+			}
 		}
 	}
 
 	/**
 	 * Processes keystrokes when editing the title of a book
 	 */
-	private void keyTypedInTitle(char typedChar, int keyCode) {
+	private void keyTypedInTitle(char typedChar, int keyCode) throws IOException {
 		switch (keyCode) {
 			case 14:
+
 				if (!this.bookTitle.isEmpty()) {
 					this.bookTitle = this.bookTitle.substring(0, this.bookTitle.length() - 1);
 					this.updateButtons();
@@ -312,17 +312,19 @@ public class GuiScreenBookUtil extends GuiScreen {
 				return;
 			case 28:
 			case 156:
+
 				if (!this.bookTitle.isEmpty()) {
 					this.sendBookToServer(true);
-					this.mc.displayGuiScreen((GuiScreen) null);
+					this.mc.displayGuiScreen(null);
 				}
 
 				return;
 			default:
+
 				if (this.bookTitle.length() < 16 && ChatAllowedCharacters.isAllowedCharacter(typedChar)) {
-					this.bookTitle = this.bookTitle + Character.toString(typedChar);
+					this.bookTitle = this.bookTitle + typedChar;
 					this.updateButtons();
-					this.hasUpdated = true;
+					this.bookIsModified = true;
 				}
 		}
 	}
@@ -334,7 +336,7 @@ public class GuiScreenBookUtil extends GuiScreen {
 	private void pageSetCurrent(String nbt) {
 		if (this.bookPages != null && this.currPage >= 0 && this.currPage < this.bookPages.tagCount()) {
 			this.bookPages.set(this.currPage, new NBTTagString(nbt));
-			this.hasUpdated = true;
+			this.bookIsModified = true;
 		}
 	}
 
@@ -351,62 +353,130 @@ public class GuiScreenBookUtil extends GuiScreen {
 	/**
 	 * Draws the screen and all the components in it.
 	 */
+
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(GuiScreenBookUtil.bookGuiTextures);
-		int k = (this.width - this.bookImageWidth) / 2;
-		byte b0 = 2;
-		this.drawTexturedModalRect(k, b0, 0, 0, this.bookImageWidth, this.bookImageHeight);
-		String s;
-		String s1;
-		int l;
+		int i = (this.width - 192) / 2;
+		int j = 2;
+		this.drawTexturedModalRect(i, 2, 0, 0, 192, 192);
 
-		if (this.settingTitle) {
-			s = this.bookTitle;
+		if (this.bookGettingSigned) {
+			String s = this.bookTitle;
 
 			if (this.bookIsUnsigned) {
 				if (this.updateCount / 6 % 2 == 0) {
-					s = s + "" + ChatFormatting.BLACK + "_";
+					s = s + "" + TextFormatting.BLACK + "_";
 				} else {
-					s = s + "" + ChatFormatting.GRAY + "_";
+					s = s + "" + TextFormatting.GRAY + "_";
 				}
 			}
 
-			s1 = I18n.format("book.editTitle", new Object[0]);
-			l = this.fontRenderer.getStringWidth(s1);
-			this.fontRenderer.drawString(s1, k + 36 + (116 - l) / 2, b0 + 16 + 16, 0);
-			int i1 = this.fontRenderer.getStringWidth(s);
-			this.fontRenderer.drawString(s, k + 36 + (116 - i1) / 2, b0 + 48, 0);
-			String s2 = I18n.format("book.byAuthor", new Object[] {this.editingPlayer.getCommandSenderEntity().getName()});
-			int j1 = this.fontRenderer.getStringWidth(s2);
-			this.fontRenderer.drawString(ChatFormatting.DARK_GRAY + s2, k + 36 + (116 - j1) / 2, b0 + 48 + 10, 0);
-			String s3 = I18n.format("book.finalizeWarning", new Object[0]);
-			this.fontRenderer.drawSplitString(s3, k + 36, b0 + 80, 116, 0);
+			String s1 = I18n.format("book.editTitle");
+			int k = this.fontRenderer.getStringWidth(s1);
+			this.fontRenderer.drawString(s1, i + 36 + (116 - k) / 2, 34, 0);
+			int l = this.fontRenderer.getStringWidth(s);
+			this.fontRenderer.drawString(s, i + 36 + (116 - l) / 2, 50, 0);
+			String s2 = I18n.format("book.byAuthor", this.editingPlayer.getName());
+			int i1 = this.fontRenderer.getStringWidth(s2);
+			this.fontRenderer.drawString(TextFormatting.DARK_GRAY + s2, i + 36 + (116 - i1) / 2, 60, 0);
+			String s3 = I18n.format("book.finalizeWarning");
+			this.fontRenderer.drawSplitString(s3, i + 36, 82, 116, 0);
 		} else {
-			s = I18n.format("book.pageIndicator", new Object[] {Integer.valueOf(this.currPage + 1), Integer.valueOf(this.bookTotalPages)});
-			s1 = "";
+			String s4 = I18n.format("book.pageIndicator", this.currPage + 1, this.bookTotalPages);
+			String s5 = "";
 
 			if (this.bookPages != null && this.currPage >= 0 && this.currPage < this.bookPages.tagCount()) {
-				s1 = this.bookPages.getStringTagAt(this.currPage);
+				s5 = this.bookPages.getStringTagAt(this.currPage);
 			}
 
 			if (this.bookIsUnsigned) {
 				if (this.fontRenderer.getBidiFlag()) {
-					s1 = s1 + "_";
+					s5 = s5 + "_";
 				} else if (this.updateCount / 6 % 2 == 0) {
-					s1 = s1 + "" + ChatFormatting.BLACK + "_";
+					s5 = s5 + "" + TextFormatting.BLACK + "_";
 				} else {
-					s1 = s1 + "" + ChatFormatting.GRAY + "_";
+					s5 = s5 + "" + TextFormatting.GRAY + "_";
 				}
+			} else if (this.cachedPage != this.currPage) {
+				if (ItemWrittenBook.validBookTagContents(this.book.getTagCompound())) {
+					try {
+						ITextComponent itextcomponent = ITextComponent.Serializer.jsonToComponent(s5);
+						this.cachedComponents = itextcomponent != null ? GuiUtilRenderComponents.splitText(itextcomponent, 116, this.fontRenderer, true, true) : null;
+					}
+					catch (JsonParseException var13) {
+						this.cachedComponents = null;
+					}
+				} else {
+					TextComponentString textcomponentstring = new TextComponentString(TextFormatting.DARK_RED + "* Invalid book tag *");
+					this.cachedComponents = Lists.newArrayList(textcomponentstring);
+				}
+
+				this.cachedPage = this.currPage;
 			}
 
-			l = this.fontRenderer.getStringWidth(s);
-			this.fontRenderer.drawString(s, k - l + this.bookImageWidth - 44, b0 + 16, 0);
-			this.fontRenderer.drawSplitString(s1, k + 36, b0 + 16 + 16, 116, 0);
+			int j1 = this.fontRenderer.getStringWidth(s4);
+			this.fontRenderer.drawString(s4, i - j1 + 192 - 44, 18, 0);
+
+			if (this.cachedComponents == null) {
+				this.fontRenderer.drawSplitString(s5, i + 36, 34, 116, 0);
+			} else {
+				int k1 = Math.min(128 / this.fontRenderer.FONT_HEIGHT, this.cachedComponents.size());
+
+				for (int l1 = 0; l1 < k1; ++l1) {
+					ITextComponent itextcomponent2 = this.cachedComponents.get(l1);
+					this.fontRenderer.drawString(itextcomponent2.getUnformattedText(), i + 36, 34 + l1 * this.fontRenderer.FONT_HEIGHT, 0);
+				}
+
+				ITextComponent itextcomponent1 = this.getClickedComponentAt(mouseX, mouseY);
+
+				if (itextcomponent1 != null) {
+					this.handleComponentHover(itextcomponent1, mouseX, mouseY);
+				}
+			}
 		}
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
+	}
+
+	@Nullable
+	public ITextComponent getClickedComponentAt(int p_175385_1_, int p_175385_2_) {
+		if (this.cachedComponents == null) {
+			return null;
+		} else {
+			int i = p_175385_1_ - (this.width - 192) / 2 - 36;
+			int j = p_175385_2_ - 2 - 16 - 16;
+
+			if (i >= 0 && j >= 0) {
+				int k = Math.min(128 / this.fontRenderer.FONT_HEIGHT, this.cachedComponents.size());
+
+				if (i <= 116 && j < this.mc.fontRenderer.FONT_HEIGHT * k + k) {
+					int l = j / this.mc.fontRenderer.FONT_HEIGHT;
+
+					if (l >= 0 && l < this.cachedComponents.size()) {
+						ITextComponent itextcomponent = this.cachedComponents.get(l);
+						int i1 = 0;
+
+						for (ITextComponent itextcomponent1 : itextcomponent) {
+							if (itextcomponent1 instanceof TextComponentString) {
+								i1 += this.mc.fontRenderer.getStringWidth(((TextComponentString) itextcomponent1).getText());
+
+								if (i1 > i) {
+									return itextcomponent1;
+								}
+							}
+						}
+					}
+
+					return null;
+				} else {
+					return null;
+				}
+			} else {
+				return null;
+			}
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
