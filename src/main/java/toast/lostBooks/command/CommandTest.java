@@ -18,7 +18,7 @@
 //import toast.lostBooks.book.IBook;
 //import toast.lostBooks.helper.BookHelper;
 //import toast.lostBooks.helper.FileHelper;
-//import toast.lostBooks.helper.PropertyHelper;
+//import toast.lostBooks.config.PropertyHelper;
 //
 //public class CommandTest extends CommandBase {
 //    // Control code pattern to strip book titles of formatting. Will not strip \u00a7k.

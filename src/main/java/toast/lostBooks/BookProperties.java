@@ -1,5 +1,11 @@
 package toast.lostBooks;
 
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.IMerchant;
+import net.minecraft.entity.INpc;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -7,13 +13,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.IMerchant;
-import net.minecraft.entity.INpc;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
-
 public class BookProperties {
+    //TODO: check entity classes and fix the logic below
     /**
      * Valid vanilla entity IDs:
      * EntityLiving.class, "Mob"
@@ -226,7 +227,7 @@ public class BookProperties {
             /// Check if it is an entity id
             else if (EntityList.getEntityNameList().contains(entry)) {
                 try {
-                    Class entityClass = (Class) EntityList.getClassFromName(entry);
+                    Class entityClass = EntityList.getClassFromName(entry);
                     if (!classes.contains(entityClass)) {
                         classes.add(entityClass);
                     }

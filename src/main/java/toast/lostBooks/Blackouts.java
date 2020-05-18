@@ -1,13 +1,12 @@
 package toast.lostBooks;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.BookHelper;
-import toast.lostBooks.helper.PropertyHelper;
+
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class Blackouts {
     // Properties stored for easy access.
@@ -22,7 +21,7 @@ public class Blackouts {
             this.blackouts = Library.getUniqueIds();
             HashSet<String> foundIds;
             Iterator<String> iterator;
-            for (EntityPlayer player : (ArrayList<EntityPlayer>) world.playerEntities) {
+            for (EntityPlayer player : world.playerEntities) {
                 foundIds = BookHelper.getBookData(player);
                 for (iterator = this.blackouts.iterator(); iterator.hasNext();)
                     if (!foundIds.contains(iterator.next())) {

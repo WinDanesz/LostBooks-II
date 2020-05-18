@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import toast.lostBooks.Library;
-import toast.lostBooks.helper.PropertyHelper;
+import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.registry.LostBooksItems;
 
 import java.util.Random;
@@ -26,12 +26,16 @@ public class VillagerBookTrades implements EntityVillager.ITradeList {
 		}
 
 		// dusty book:
-		ItemStack itemstack = new ItemStack(LostBooksItems.random_book);
-		int j = 7 + random.nextInt(5);
+		if (PropertyHelper.getBoolean(PropertyHelper.TRADING, "sellDustyBook")) {
+			ItemStack itemstack = new ItemStack(LostBooksItems.random_book);
+			int j = 7 + random.nextInt(5);
 
-		if (j > 64) {
-			j = 64;
+			if (j > 64) {
+				j = 64;
+			}
+			recipeList.add(new MerchantRecipe(new ItemStack(Items.EMERALD, j), itemstack));
+
 		}
-		recipeList.add(new MerchantRecipe(new ItemStack(Items.EMERALD, j), itemstack));
+
 	}
 }

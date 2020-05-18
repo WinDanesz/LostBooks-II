@@ -1,5 +1,16 @@
 package toast.lostBooks.helper;
 
+import net.minecraft.server.MinecraftServer;
+import toast.lostBooks.BookProperties;
+import toast.lostBooks.Library;
+import toast.lostBooks.LostBookCollection;
+import toast.lostBooks.LostBooks;
+import toast.lostBooks.TextHelper;
+import toast.lostBooks.book.AdLibStats;
+import toast.lostBooks.book.BookCollection;
+import toast.lostBooks.book.BookStats;
+import toast.lostBooks.book.IBook;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -8,19 +19,6 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import net.minecraft.server.MinecraftServer;
-import toast.lostBooks.book.AdLibStats;
-import toast.lostBooks.book.BookCollection;
-import toast.lostBooks.BookProperties;
-import toast.lostBooks.book.BookStats;
-import toast.lostBooks.book.IBook;
-import toast.lostBooks.Library;
-import toast.lostBooks.LostBookCollection;
-import toast.lostBooks.LostBooks;
-import toast.lostBooks.TextHelper;
-
-//import net.minecraft.util.ChatAllowedCharacters;
 
 public abstract class FileHelper {
     /// The current world folder.

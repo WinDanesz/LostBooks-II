@@ -1,12 +1,12 @@
-package toast.lostBooks.helper;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+package toast.lostBooks.config;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import toast.lostBooks.LostBooks;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * This helper class automatically creates, stores, and retrieves properties.
@@ -59,6 +59,7 @@ public abstract class PropertyHelper {
         PropertyHelper.add(config, order, PropertyHelper.TRADING, "maxBookCost", 4, "The maximum emerald cost (from 1 to 64) a villager will charge for a book. Default is 4.");
         PropertyHelper.add(config, order, PropertyHelper.TRADING, "sellLost", true, "If this is true, librarians will be able to find and sell lost books. Note that unless you \"lose\" a lot of books and/or have a really low lost book drop rate, you probably won't see any in trades anyway. Default is true.");
         PropertyHelper.add(config, order, PropertyHelper.TRADING, "sellUnique", false, "If this is true, librarians will be able to sell unique books. Trades ignore all unique blackout restrictions! Default is false.");
+        PropertyHelper.add(config, order, PropertyHelper.TRADING, "sellDustyBook", true, "If this is true, librarians will be able to sell dusty books. Default is true.");
         //config.setCategoryPropertyOrder(Properties.TRADING, order);
         order.clear();
 

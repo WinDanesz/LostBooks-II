@@ -1,7 +1,6 @@
 package toast.lostBooks;
 
 import net.minecraft.command.ServerCommandManager;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -13,21 +12,12 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-import toast.lostBooks.client.ClientEventHandler;
+import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.helper.AdLibHelper;
 import toast.lostBooks.helper.FileHelper;
-import toast.lostBooks.helper.PropertyHelper;
 
 import java.io.File;
 import java.util.Random;
-//import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-//import cpw.mods.fml.common.registry.GameRegistry;
-//import cpw.mods.fml.relauncher.Side;
-//import net.minecraft.util.WeightedRandomChestContent;
-//import net.minecraftforge.common.ChestGenHooks;
-//import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.fml.common.SidedProxy;
-//import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-//import org.apache.logging.log4j.Logger;
 
 @Mod(modid = LostBooks.MODID, name = "Lost Books", version = LostBooks.VERSION, acceptedMinecraftVersions = LostBooks.MC_VERSION)
 
@@ -93,24 +83,7 @@ public class LostBooks {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		proxy.registerVillagerTrades();
-
-
-		// TODO: re-add the loot injection
-//		if (event.getSide() == Side.CLIENT) {
-//			new ClientEventHandler();
-//		}
-//		new TickHandler();
-//		if (Properties.getBoolean(Properties.GENERAL, "addChestLoot")) {
-//			ItemStack book = new ItemStack(LostBooks.randomBook, 1, 0);
-//			WeightedRandomChestContent tmp = new WeightedRandomChestContent(book, 1, 1, 2);
-//			ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(tmp);
-//			ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(tmp);
-//			ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(tmp);
-//			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(tmp);
-//			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY).addItem(new WeightedRandomChestContent(book, 1, 5, 4));
-//			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(tmp);
-//			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(tmp);
-//		}
+		new TickHandler();
 	}
 
 	// Called after initialization. Used to check for dependencies.
@@ -118,7 +91,7 @@ public class LostBooks {
 	public void postInit(FMLPostInitializationEvent event) {
 		LostBooks.console("Loading books...");
 		LostBooks.console("Loaded " + Library.UNIQUE_BOOK_COUNT + " unique books, " + Library.COMMON_BOOKS.size() + " common books, and " + Library.AD_LIB_BOOKS.size() + " adlib books!");
-//		AdLibHelper.init();
+		AdLibHelper.init();
 		//BinHelper.genCharWidths();
 		//BinHelper.genGlyphWidths();
 	}
@@ -139,24 +112,6 @@ public class LostBooks {
 		ServerCommandManager commandManager = (ServerCommandManager) event.getServer().getCommandManager();
 //		commandManager.registerCommand(new CommandTest());
 //		commandManager.registerCommand(new CommandBlackouts());
-	}
-
-	// Makes the first letter upper case.
-	public static String cap(String string) {
-		char[] chars = string.toCharArray();
-		if (chars.length <= 0)
-			return "";
-		chars[0] = Character.toUpperCase(chars[0]);
-		return new String(chars);
-	}
-
-	// Makes the first letter lower case.
-	public static String decap(String string) {
-		char[] chars = string.toCharArray();
-		if (chars.length <= 0)
-			return "";
-		chars[0] = Character.toLowerCase(chars[0]);
-		return new String(chars);
 	}
 
 	// Prints the message to the console with this mod's name tag.

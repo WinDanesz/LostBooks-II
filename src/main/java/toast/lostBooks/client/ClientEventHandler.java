@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import toast.lostBooks.LostBooks;
+import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.gui.GuiScreenBookUtil;
-import toast.lostBooks.helper.PropertyHelper;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = LostBooks.MODID)

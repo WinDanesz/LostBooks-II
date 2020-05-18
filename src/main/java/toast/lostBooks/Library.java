@@ -1,9 +1,5 @@
 package toast.lostBooks;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -11,9 +7,13 @@ import net.minecraft.item.ItemStack;
 import toast.lostBooks.book.BookCollection;
 import toast.lostBooks.book.BookStats;
 import toast.lostBooks.book.IBook;
+import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.BookHelper;
-import toast.lostBooks.helper.PropertyHelper;
 import toast.lostBooks.helper.RandomHelper;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public abstract class Library {
     /// Line Feed [LF]. Normally typed with \n.

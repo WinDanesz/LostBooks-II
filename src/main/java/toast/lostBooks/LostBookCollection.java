@@ -1,10 +1,5 @@
 package toast.lostBooks;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,10 +7,15 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import toast.lostBooks.book.BookStats;
 import toast.lostBooks.book.IBook;
+import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.BookHelper;
 import toast.lostBooks.helper.FileHelper;
-import toast.lostBooks.helper.PropertyHelper;
 import toast.lostBooks.helper.RandomHelper;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 public class LostBookCollection implements IBook {
     /// Form Feed [FF]. Char value is 12.

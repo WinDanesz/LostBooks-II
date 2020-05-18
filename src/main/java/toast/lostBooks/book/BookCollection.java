@@ -1,15 +1,15 @@
 package toast.lostBooks.book;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import toast.lostBooks.BookProperties;
-import toast.lostBooks.helper.PropertyHelper;
+import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.FileHelper;
 import toast.lostBooks.helper.RandomHelper;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class BookCollection implements IBook {
     /// The file name for this book.

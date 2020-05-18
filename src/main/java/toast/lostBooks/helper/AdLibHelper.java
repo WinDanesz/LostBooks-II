@@ -1,5 +1,14 @@
 package toast.lostBooks.helper;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.IAnimals;
+import toast.lostBooks.Library;
+import toast.lostBooks.LostBooks;
+import toast.lostBooks.TextHelper;
+import toast.lostBooks.book.BookStats;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -8,15 +17,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.IAnimals;
-import toast.lostBooks.book.BookStats;
-import toast.lostBooks.Library;
-import toast.lostBooks.LostBooks;
-import toast.lostBooks.TextHelper;
 
 public abstract class AdLibHelper {
     /// The word codes that are determined by words files.
@@ -164,7 +164,7 @@ public abstract class AdLibHelper {
 
     /// Capitalizes the string if true. Otherwise, does nothing.
     private static String cap(boolean cap, String value) {
-        return cap ? LostBooks.cap(value) : value;
+        return cap ? TextHelper.cap(value) : value;
     }
 
     /// Returns true if the entity should be considered.
@@ -184,7 +184,7 @@ public abstract class AdLibHelper {
     public static String mash() {
         String[] parts = { "cree", "per", "skel", "e", "ton", "zom", "bie", "spi", "der", "bla", "per", "the", "na", "ra", "a", "i", "o", "u", "do", "pa", "queb", "pin", "goo", "ball", "tall", "fu", "crab", "poo", "han", "so", "lo", "star", "me", "yo", "boo", "we", "jam", "ka", "tha", "che", "cha", "vu", "jack", "ed", "va", "ny", "she", "he", "ro", "bri", "ne", "fa", "ther", "to", "ast", "zap", "pick", "ax", "sho", "vel", "swo", "rd", "bow", "ar", "row", "arm", "or", "pump", "kin" };
         String word = "";
-        for (int syl = 2 + (LostBooks.random.nextInt(3) == 0 ? 0 : LostBooks.random.nextInt(3)); syl-- > 0;) {
+        for (int syl = 2 + (LostBooks.random.nextInt(3)); syl-- > 0; ) {
             word += parts[LostBooks.random.nextInt(parts.length)];
         }
         return word;

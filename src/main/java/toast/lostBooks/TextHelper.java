@@ -149,4 +149,22 @@ public class TextHelper {
     public static boolean isFormatSpecial(char c) {
         return c >= 107 && c <= 111 || c >= 75 && c <= 79 || c == 114 || c == 82;
     }
+
+    // Makes the first letter upper case.
+    public static String cap(String string) {
+        char[] chars = string.toCharArray();
+        if (chars.length <= 0)
+            return "";
+        chars[0] = Character.toUpperCase(chars[0]);
+        return new String(chars);
+    }
+
+    // Makes the first letter lower case.
+    public static String decap(String string) {
+        char[] chars = string.toCharArray();
+        if (chars.length <= 0)
+            return "";
+        chars[0] = Character.toLowerCase(chars[0]);
+        return new String(chars);
+    }
 }
