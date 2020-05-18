@@ -1,12 +1,11 @@
-package toast.lostBooks;
+package toast.lostBooks.book;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import toast.lostBooks.book.BookStats;
-import toast.lostBooks.book.IBook;
+import toast.lostBooks.LostBooks;
 import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.BookHelper;
 import toast.lostBooks.helper.FileHelper;

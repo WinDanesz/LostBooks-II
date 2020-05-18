@@ -14,11 +14,7 @@ import toast.lostBooks.gui.GuiScreenBookUtil;
 @Mod.EventBusSubscriber(modid = LostBooks.MODID)
 public class ClientEventHandler {
 
-	//    public static final ClientEventHandler INSTANCE = new ClientEventHandler();
-
-	public ClientEventHandler() {
-		//        MinecraftForge.EVENT_BUS.register(this);
-	}
+	public ClientEventHandler() {}
 
 	/**
 	 * Called by GuiScreen.?.
@@ -28,7 +24,6 @@ public class ClientEventHandler {
 	 */
 	@SubscribeEvent()
 	public static void onGuiOpened(GuiOpenEvent event) {
-		System.out.println("called ");
 		if (event.getGui() != null && event.getGui().getClass() == GuiScreenBook.class) {
 			boolean bookmark = PropertyHelper.getBoolean(PropertyHelper.UTILS, "openToPreviousPage");
 			boolean pauseGame = PropertyHelper.getBoolean(PropertyHelper.UTILS, "pauseWhileReading");

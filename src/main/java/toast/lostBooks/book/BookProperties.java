@@ -1,10 +1,11 @@
-package toast.lostBooks;
+package toast.lostBooks.book;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import toast.lostBooks.LostBooks;
 
 import java.io.File;
 import java.io.FileInputStream;

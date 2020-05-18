@@ -6,7 +6,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
-import toast.lostBooks.Library;
+import toast.lostBooks.book.Library;
 import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.registry.LostBooksItems;
 

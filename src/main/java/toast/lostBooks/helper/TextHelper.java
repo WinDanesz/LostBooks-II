@@ -1,4 +1,6 @@
-package toast.lostBooks;
+package toast.lostBooks.helper;
+
+import toast.lostBooks.LostBooks;
 
 import java.io.File;
 import java.io.FileInputStream;

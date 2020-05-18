@@ -1,13 +1,13 @@
-package toast.lostBooks;
-
-import java.io.File;
-import java.io.FileInputStream;
+package toast.lostBooks.book;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import toast.lostBooks.book.BookStats;
+import toast.lostBooks.LostBooks;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 public class LostBookStats extends BookStats {
     /// The book's file.
@@ -16,7 +16,7 @@ public class LostBookStats extends BookStats {
     public NBTTagCompound bookTag;
 
     public LostBookStats(File file) {
-        super(file.getName(), (String) null, (String) null, (String[]) null);
+        super(file.getName(), null, null, (String[]) null);
         this.bookFile = file;
         try {
             if (file.exists()) {

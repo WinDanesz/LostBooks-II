@@ -1,12 +1,10 @@
-package toast.lostBooks;
+package toast.lostBooks.book;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import toast.lostBooks.book.BookCollection;
-import toast.lostBooks.book.BookStats;
-import toast.lostBooks.book.IBook;
+import toast.lostBooks.LostBooks;
 import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.BookHelper;
 import toast.lostBooks.helper.RandomHelper;

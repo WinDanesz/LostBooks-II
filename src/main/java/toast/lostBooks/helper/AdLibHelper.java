@@ -4,10 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
-import toast.lostBooks.Library;
 import toast.lostBooks.LostBooks;
-import toast.lostBooks.TextHelper;
 import toast.lostBooks.book.BookStats;
+import toast.lostBooks.book.Library;
 
 import java.io.File;
 import java.io.FileInputStream;

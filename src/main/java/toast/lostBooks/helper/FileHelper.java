@@ -1,15 +1,14 @@
 package toast.lostBooks.helper;
 
 import net.minecraft.server.MinecraftServer;
-import toast.lostBooks.BookProperties;
-import toast.lostBooks.Library;
-import toast.lostBooks.LostBookCollection;
 import toast.lostBooks.LostBooks;
-import toast.lostBooks.TextHelper;
 import toast.lostBooks.book.AdLibStats;
 import toast.lostBooks.book.BookCollection;
+import toast.lostBooks.book.BookProperties;
 import toast.lostBooks.book.BookStats;
 import toast.lostBooks.book.IBook;
+import toast.lostBooks.book.Library;
+import toast.lostBooks.book.LostBookCollection;
 
 import java.io.File;
 import java.io.FileFilter;

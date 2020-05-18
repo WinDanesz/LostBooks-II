@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import toast.lostBooks.book.Library;
 import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.AdLibHelper;
 import toast.lostBooks.helper.FileHelper;

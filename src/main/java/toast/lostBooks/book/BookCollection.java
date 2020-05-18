@@ -2,7 +2,6 @@ package toast.lostBooks.book;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import toast.lostBooks.BookProperties;
 import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.FileHelper;
 import toast.lostBooks.helper.RandomHelper;

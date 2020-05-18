@@ -11,9 +11,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import toast.lostBooks.Blackouts;
-import toast.lostBooks.helper.BookHelper;
-import toast.lostBooks.Library;
 import toast.lostBooks.TickHandler;
+import toast.lostBooks.book.Library;
+import toast.lostBooks.helper.BookHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;

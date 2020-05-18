@@ -11,16 +11,16 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import toast.lostBooks.Blackouts;
-import toast.lostBooks.Library;
 import toast.lostBooks.LostBooks;
 import toast.lostBooks.TickHandler;
+import toast.lostBooks.book.Library;
 import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.BookHelper;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class EventHandler {
 
-    public EventHandler(){}
+    public EventHandler() {}
 
     /**
      * Called by EntityLiving.onDeath().
@@ -33,8 +33,8 @@ public class EventHandler {
      *
      * @param event The event being triggered.
      */
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onLivingDrops(LivingDropsEvent event) {
+    @SubscribeEvent
+    public static void onLivingDrops(LivingDropsEvent event) {
         if (event.getEntityLiving()== null || event.getEntityLiving().world.isRemote)
             return;
         if (LostBooks.debug || event.isRecentlyHit() && PropertyHelper.getBoolean(PropertyHelper.GENERAL, "dropRate", event.getEntityLiving().getRNG())) {
@@ -54,8 +54,8 @@ public class EventHandler {
      *
      * @param event The event being triggered.
      */
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onEntityItemPickup(EntityItemPickupEvent event) {
+    @SubscribeEvent
+    public static void onEntityItemPickup(EntityItemPickupEvent event) {
         if (event.getEntityPlayer() == null || event.getEntityPlayer().world.isRemote)
             return;
         ItemStack book = event.getItem().getItem();
@@ -86,8 +86,8 @@ public class EventHandler {
      *
      * @param event The event being triggered.
      */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onItemExpire(ItemExpireEvent event) {
+    @SubscribeEvent
+    public static void onItemExpire(ItemExpireEvent event) {
         if (PropertyHelper.getBoolean(PropertyHelper.GENERAL, "lostBookCaptureRate") && !event.isCanceled()) {
 			ItemStack book = event.getEntityItem().getItem();
             if (book.getItem().getUnlocalizedNameInefficiently(book).equals("item.writtenBook") && !BookHelper.hasBookId(book)) {
@@ -105,8 +105,8 @@ public class EventHandler {
      *
      * @param event The event being triggered.
      */
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onWorldUnload(WorldEvent.Unload event) {
+    @SubscribeEvent
+    public static void onWorldUnload(WorldEvent.Unload event) {
         if (event.getWorld() != null && !event.getWorld().isRemote) {
             TickHandler.unloadBlackouts(event.getWorld());
         }
