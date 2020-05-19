@@ -1,7 +1,7 @@
 {
-    "homepage": "https://github.com/WinDanesz/LostBooks-II",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lost-books",
     "promos": {
-        "1.12.2-latest": "2.0.1",
-        "1.12.2-recommended": "2.0.2"
+        "1.12.2-latest": "2.0.0",
+        "1.12.2-recommended": "2.0.0"
     }
 }
