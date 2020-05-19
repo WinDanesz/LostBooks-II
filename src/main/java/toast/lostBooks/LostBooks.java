@@ -115,7 +115,7 @@ public class LostBooks {
 //		event.registerCommand(new CommandTest()); TODO
 	}
 
-	// Prints the message to the console with this mod's name tag.
+	// Prints the message to the console with this mod's name tag. //test
 	public static void console(String message) {
 		System.out.println("[LostBooks] " + message);
 	}
