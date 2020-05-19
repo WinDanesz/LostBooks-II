@@ -1,4 +1,4 @@
-package toast.lostBooks;
+package toast.lostBooks.book;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;

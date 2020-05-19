@@ -1,6 +1,5 @@
 package toast.lostBooks;
 
-import net.minecraft.command.ServerCommandManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -8,11 +7,13 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import toast.lostBooks.book.CommonProxy;
 import toast.lostBooks.book.Library;
+import toast.lostBooks.command.CommandBlackouts;
 import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.AdLibHelper;
 import toast.lostBooks.helper.FileHelper;
@@ -62,7 +63,7 @@ public class LostBooks {
 	public static Configuration CONFIG;
 
 	// Location of the proxy code, used by Forge.
-	@SidedProxy(clientSide = "toast.lostBooks.client.ClientProxy", serverSide = "toast.lostBooks.CommonProxy")
+	@SidedProxy(clientSide = "toast.lostBooks.client.ClientProxy", serverSide = "toast.lostBooks.book.CommonProxy")
 	public static CommonProxy proxy;
 
 	// Called before initialization. Loads the properties/configurations.
@@ -107,12 +108,11 @@ public class LostBooks {
 
 	// Use if you need to handle something before the server has even been created.
 	@Mod.EventHandler
-	public void serverStarting(FMLServerAboutToStartEvent event) {
+	public void serverStarting(FMLServerStartingEvent event) {
 		FileHelper.init(event.getServer());
 
-		ServerCommandManager commandManager = (ServerCommandManager) event.getServer().getCommandManager();
-//		commandManager.registerCommand(new CommandTest());
-//		commandManager.registerCommand(new CommandBlackouts());
+		event.registerServerCommand(new CommandBlackouts());
+//		event.registerCommand(new CommandTest()); TODO
 	}
 
 	// Prints the message to the console with this mod's name tag.
