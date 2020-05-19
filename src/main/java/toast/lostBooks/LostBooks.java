@@ -47,6 +47,7 @@ public class LostBooks {
 	public static final String MODID = "lostbooks";
 	public static final String VERSION = "2.0.0";
 	public static final String MC_VERSION = "[1.12.2]";
+	public static final String UPDATE_JSON = "https://github.com/WinDanesz/LostBooks-II/tree/1.12.2/.forge/update.json";
 
 	// If true, this mod starts up in debug mode, printing extra information to the console.
 	public static final boolean debug = true;
