@@ -25,4 +25,5 @@ jobs:
           chmod +x gradlew
           ./gradlew clean
           ./gradlew setupCIWorkspace
-          ./gradlew build publish
+          ./gradlew build
+#          ./gradlew build publish
