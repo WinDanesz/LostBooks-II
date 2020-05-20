@@ -50,7 +50,7 @@ public class LostBooks {
 	public static final String UPDATE_JSON = "https://raw.githubusercontent.com/WinDanesz/LostBooks-II/1.12.2/.forge/update.json";
 
 	// If true, this mod starts up in debug mode, printing extra information to the console.
-	public static final boolean debug = true;
+	public static final boolean debug = false;
 	// The mod's random number generator.
 	public static final Random random = new Random();
 	// The network channel for this mod.

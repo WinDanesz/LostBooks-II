@@ -77,10 +77,10 @@ public class GuiScreenBookUtil extends GuiScreen {
 	private List<ITextComponent> cachedComponents;
 
 	public GuiScreenBookUtil(GuiScreenBook parentScreen, boolean bookmark, boolean pauseGame) {
-		this.editingPlayer = ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "editingPlayer");
-		this.book = ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "book");
-		this.bookIsUnsigned = ((Boolean) ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "bookIsUnsigned")).booleanValue();
-		this.bookGettingSigned = ((Boolean) ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "bookGettingSigned")).booleanValue();
+		this.editingPlayer = ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "field_146468_g");
+		this.book = ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "field_146474_h");
+		this.bookIsUnsigned = ((Boolean) ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "field_146475_i")).booleanValue();
+		this.bookGettingSigned = ((Boolean) ObfuscationReflectionHelper.getPrivateValue(GuiScreenBook.class, parentScreen, "field_146480_s")).booleanValue();
 		this.pauseGame = pauseGame;
 
 		if (this.book.hasTagCompound()) {

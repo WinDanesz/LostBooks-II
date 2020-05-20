@@ -22,7 +22,7 @@ apply plugin: 'idea'
 
 version = "2.0.0"
 group = "toast.lostBooks" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "lostbooks"
+archivesBaseName = "LostBooks-II-1.12.2"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
