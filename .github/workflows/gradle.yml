@@ -1,6 +1,6 @@
 # This workflow is triggered on pushes to the repository.
 
-name: Build Mod with Gradle
+name: Build Mod
 
 on:
   push:
