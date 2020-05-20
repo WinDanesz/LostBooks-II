@@ -1,4 +1,4 @@
-# Lost Books II &nbsp; ![Build Mod](https://github.com/WinDanesz/LostBooks-II/workflows/Build%20Mod%20with%20Gradle/badge.svg) [![Curseforge](http://cf.way2muchnoise.eu/full_lost-books_downloads.svg)](https://minecraft.curseforge.com/projects/lost-books) [![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_lost-books_all.svg)](http://www.curseforge.com/minecraft/mc-mods/lost-books/files)
+# Lost Books II &nbsp; ![Mod Build](https://github.com/WinDanesz/LostBooks-II/workflows/Mod%20Build/badge.svg) [![Curseforge](http://cf.way2muchnoise.eu/full_lost-books_downloads.svg)](https://minecraft.curseforge.com/projects/lost-books) [![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_lost-books_all.svg)](http://www.curseforge.com/minecraft/mc-mods/lost-books/files)
 
 Adds completely configurable pre-written and procedurally generated books as mob drops.
 
