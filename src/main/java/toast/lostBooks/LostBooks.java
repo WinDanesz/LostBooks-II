@@ -16,6 +16,7 @@ import toast.lostBooks.book.Library;
 import toast.lostBooks.command.CommandBlackouts;
 import toast.lostBooks.config.PropertyHelper;
 import toast.lostBooks.helper.AdLibHelper;
+import toast.lostBooks.helper.ConfigFileHelper;
 import toast.lostBooks.helper.FileHelper;
 
 import java.io.File;
@@ -78,13 +79,11 @@ public class LostBooks {
 
 		LostBooks.CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel("LB|CP");
 		LostBooks.CHANNEL.registerMessage(MessageCurrPage.Handler.class, MessageCurrPage.class, 0, Side.SERVER);
-
-//		LostBooks.randomBook = new ItemRandomBook().setUnlocalizedName("randomBook").setCreativeTab(CreativeTabs.tabMisc).setTextureName("book_written").setMaxStackSize(16);
-//		GameRegistry.registerItem(LostBooks.randomBook, LostBooks.randomBook.getUnlocalizedName().substring(5));
 	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		ConfigFileHelper.init();
 		proxy.registerVillagerTrades();
 		new TickHandler();
 	}
@@ -113,7 +112,7 @@ public class LostBooks {
 		FileHelper.init(event.getServer());
 
 		event.registerServerCommand(new CommandBlackouts());
-//		event.registerCommand(new CommandTest()); TODO
+		//		event.registerCommand(new CommandTest()); TODO
 	}
 
 	// Prints the message to the console with this mod's name tag. //test
