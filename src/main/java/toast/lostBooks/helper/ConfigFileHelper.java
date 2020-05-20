@@ -24,6 +24,7 @@ public class ConfigFileHelper {
 			ConfigFileHelper.copyJarResourceToFolder(jarURLConnection, new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks"));
 		}
 		catch (Exception e) {
+			LostBooks.console("Failed to initialize the ConfigFileHelper");
 			e.printStackTrace();
 		}
 	}
