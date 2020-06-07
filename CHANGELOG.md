@@ -2,9 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
 
---
+## [2.0.1] - 2020-06-07
+
+### Changed
+
+- Fixed server side crash 
 
 ## [2.0.0] - 2020-05-16
 

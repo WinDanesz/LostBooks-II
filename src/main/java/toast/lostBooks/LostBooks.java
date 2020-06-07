@@ -46,7 +46,7 @@ public class LostBooks {
 
 	public static final String NAME = "Lost Books II";
 	public static final String MODID = "lostbooks";
-	public static final String VERSION = "2.0.0";
+	public static final String VERSION = "2.0.1";
 	public static final String MC_VERSION = "[1.12.2]";
 	public static final String UPDATE_JSON = "https://raw.githubusercontent.com/WinDanesz/LostBooks-II/1.12.2/.forge/update.json";
 
