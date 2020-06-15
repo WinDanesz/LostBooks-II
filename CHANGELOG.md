@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 
 
+## [2.0.2] - 2020-06-15
+
+### Changed
+
+- Fixed another server side crash with config writer
+ 
 ## [2.0.1] - 2020-06-07
 
 ### Changed
