@@ -93,7 +93,6 @@ public class InitConfig {
 	public static URL formatFileUrl2JarUrl(URL url) throws MalformedURLException {
 		StringBuilder urlStr = new StringBuilder();
 		urlStr.append(url.toString());
-		System.out.println(urlStr.toString());
 		return new URL((urlStr.toString()));
 	}
 }
