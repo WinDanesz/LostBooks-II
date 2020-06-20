@@ -3,30 +3,39 @@ package toast.lostBooks.helper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import toast.lostBooks.LostBooks;
+import toast.lostBooks.config.ConfigPropertyHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class ConfigFileHelper {
+public class InitConfig {
 
 	public static void init() {
-		try {
-			LostBooks.console("Initializing config directory with the default books");
-			URL url = FileHelper.class.getClassLoader().getResource("assets/lostbooks/LostBooks");
-			JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-			ConfigFileHelper.copyJarResourceToFolder(jarURLConnection, new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks"));
+		if (ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "generateDefaultBookPackAtStart")) {
+			try {
+				LostBooks.console("Initializing config directory with the default books. Set 'generateDefaultBookPackAtStart' to False in lostbooks.cfg to disable this behaviour.");
+				URL url = FileHelper.class.getClassLoader().getResource("assets/lostbooks/LostBooks");
+				url = formatFileUrl2JarUrl(url);
+				JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
+				InitConfig.copyJarResourceToFolder(jarURLConnection, new File(LostBooks.CONFIG_DIRECTORY, "/LostBooks"));
+				LostBooks.console("Completed initializing config directory with the default books.");
+			}
+			catch (Exception e) {
+				LostBooks.console("Failed to initialize the ConfigFileHelper. Please report the below error at the issue tracker (https://github.com/WinDanesz/LostBooks-II/issues)");
+				e.printStackTrace();
+			}
+		} else {
+			LostBooks.console("Skipping initialization of the default book pack as 'generateDefaultBookPackAtStart' was set to False.");
 		}
-		catch (Exception e) {
-			LostBooks.console("Failed to initialize the ConfigFileHelper");
-			e.printStackTrace();
-		}
+
 	}
 
 	/**
@@ -77,4 +86,14 @@ public class ConfigFileHelper {
 
 	}
 
+	/* @param url
+	 * @return
+	 * @throws MalformedURLException
+	 */
+	public static URL formatFileUrl2JarUrl(URL url) throws MalformedURLException {
+		StringBuilder urlStr = new StringBuilder();
+		urlStr.append(url.toString());
+		System.out.println(urlStr.toString());
+		return new URL((urlStr.toString()));
+	}
 }

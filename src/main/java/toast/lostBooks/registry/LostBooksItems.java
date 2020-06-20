@@ -24,7 +24,7 @@ public class LostBooksItems {
 
 	private static void registerItem(IForgeRegistry<Item> registry, String name, Item item) {
 		item.setRegistryName(LostBooks.MODID, name);
-		item.setTranslationKey(item.getRegistryName().toString());
+		item.setUnlocalizedName(item.getRegistryName().toString());
 		registry.register(item);
 	}
 

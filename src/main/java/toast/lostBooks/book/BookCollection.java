@@ -2,7 +2,7 @@ package toast.lostBooks.book;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.config.ConfigPropertyHelper;
 import toast.lostBooks.helper.FileHelper;
 import toast.lostBooks.helper.RandomHelper;
 
@@ -165,7 +165,7 @@ public class BookCollection implements IBook {
     public int getWeight() {
         if (this.categoryId == null)
             return this.weight;
-        return PropertyHelper.getInt(PropertyHelper.GENERAL, this.categoryId + "BookWeight");
+		return ConfigPropertyHelper.getInt(ConfigPropertyHelper.GENERAL, this.categoryId + "BookWeight");
     }
 
     /// Returns the number of stories included in this book.

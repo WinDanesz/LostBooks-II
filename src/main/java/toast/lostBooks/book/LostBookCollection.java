@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import toast.lostBooks.LostBooks;
-import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.config.ConfigPropertyHelper;
 import toast.lostBooks.helper.BookHelper;
 import toast.lostBooks.helper.FileHelper;
 import toast.lostBooks.helper.RandomHelper;
@@ -116,7 +116,7 @@ public class LostBookCollection implements IBook {
     /// Returns true if any books can be dropped by the entity.
     @Override
     public boolean isValid(EntityLivingBase entity) {
-        return this.getWeight() > 0 && this.size() > 0 && BookHelper.canBookDrop(entity, BookProperties.getEntityList("LostBooks.cfg", PropertyHelper.getString(PropertyHelper.LOST_BOOKS, "whitelist")), BookProperties.getEntityList("LostBooks.cfg", PropertyHelper.getString(PropertyHelper.LOST_BOOKS, "blacklist")), BookProperties.getIdSet("LostBooks.cfg", PropertyHelper.getString(PropertyHelper.LOST_BOOKS, "biomes")));
+		return this.getWeight() > 0 && this.size() > 0 && BookHelper.canBookDrop(entity, BookProperties.getEntityList("LostBooks.cfg", ConfigPropertyHelper.getString(ConfigPropertyHelper.LOST_BOOKS, "whitelist")), BookProperties.getEntityList("LostBooks.cfg", ConfigPropertyHelper.getString(ConfigPropertyHelper.LOST_BOOKS, "blacklist")), BookProperties.getIdSet("LostBooks.cfg", ConfigPropertyHelper.getString(ConfigPropertyHelper.LOST_BOOKS, "biomes")));
     }
 
     /// Returns true if any books can be spawned for the player (including looted dusty books).
@@ -134,7 +134,7 @@ public class LostBookCollection implements IBook {
     /// Returns the weight of this object.
     @Override
     public int getWeight() {
-        return PropertyHelper.getInt(PropertyHelper.GENERAL, "lostBookWeight");
+		return ConfigPropertyHelper.getInt(ConfigPropertyHelper.GENERAL, "lostBookWeight");
     }
 
     /// Returns the number of stories included in this book.

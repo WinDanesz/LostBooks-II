@@ -5,7 +5,7 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.config.ConfigPropertyHelper;
 import toast.lostBooks.gui.GuiScreenBookUtil;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
@@ -22,8 +22,8 @@ public class ClientEventHandler {
 	@SubscribeEvent()
 	public static void onGuiOpened(GuiOpenEvent event) {
 		if (event.getGui() != null && event.getGui().getClass() == GuiScreenBook.class) {
-			boolean bookmark = PropertyHelper.getBoolean(PropertyHelper.UTILS, "openToPreviousPage");
-			boolean pauseGame = PropertyHelper.getBoolean(PropertyHelper.UTILS, "pauseWhileReading");
+			boolean bookmark = ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.UTILS, "openToPreviousPage");
+			boolean pauseGame = ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.UTILS, "pauseWhileReading");
 			if (bookmark || !pauseGame) {
 				event.setGui(new GuiScreenBookUtil((GuiScreenBook) event.getGui(), bookmark, pauseGame));
 			}

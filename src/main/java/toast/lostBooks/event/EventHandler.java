@@ -7,14 +7,13 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import toast.lostBooks.Blackouts;
 import toast.lostBooks.LostBooks;
 import toast.lostBooks.TickHandler;
 import toast.lostBooks.book.Library;
-import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.config.ConfigPropertyHelper;
 import toast.lostBooks.helper.BookHelper;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
@@ -37,7 +36,7 @@ public class EventHandler {
     public static void onLivingDrops(LivingDropsEvent event) {
         if (event.getEntityLiving()== null || event.getEntityLiving().world.isRemote)
             return;
-        if (LostBooks.debug || event.isRecentlyHit() && PropertyHelper.getBoolean(PropertyHelper.GENERAL, "dropRate", event.getEntityLiving().getRNG())) {
+        if (LostBooks.debug || event.isRecentlyHit() && ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "dropRate", event.getEntityLiving().getRNG())) {
             ItemStack book = Library.nextBook(event.getEntityLiving());
             if (book != null) {
                 EntityItem drop = new EntityItem(event.getEntityLiving().world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, book);
@@ -60,11 +59,8 @@ public class EventHandler {
             return;
         ItemStack book = event.getItem().getItem();
         String id = BookHelper.getBookId(book);
-        if (id == null || id == "") {
-            // Do nothing.
-        }
-        else if (BookHelper.isBookFound(event.getEntityPlayer(), id)) {
-            if (PropertyHelper.getBoolean(PropertyHelper.GENERAL, "hardUniqueBlackouts")) {
+        if (id != null && !id.isEmpty() && BookHelper.isBookFound(event.getEntityPlayer(), id)) {
+            if (ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "hardUniqueBlackouts")) {
                 event.setCanceled(true);
                 return;
             }
@@ -88,7 +84,7 @@ public class EventHandler {
      */
     @SubscribeEvent
     public static void onItemExpire(ItemExpireEvent event) {
-        if (PropertyHelper.getBoolean(PropertyHelper.GENERAL, "lostBookCaptureRate") && !event.isCanceled()) {
+        if (ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "lostBookCaptureRate") && !event.isCanceled()) {
 			ItemStack book = event.getEntityItem().getItem();
             if (book.getItem().getUnlocalizedNameInefficiently(book).equals("item.writtenBook") && !BookHelper.hasBookId(book)) {
                 Library.LOST_BOOKS.capture(book);

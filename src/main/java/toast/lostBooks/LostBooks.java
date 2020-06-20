@@ -14,10 +14,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import toast.lostBooks.book.CommonProxy;
 import toast.lostBooks.book.Library;
 import toast.lostBooks.command.CommandBlackouts;
-import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.config.ConfigPropertyHelper;
 import toast.lostBooks.helper.AdLibHelper;
-import toast.lostBooks.helper.ConfigFileHelper;
 import toast.lostBooks.helper.FileHelper;
+import toast.lostBooks.helper.InitConfig;
 
 import java.io.File;
 import java.util.Random;
@@ -46,7 +46,7 @@ public class LostBooks {
 
 	public static final String NAME = "Lost Books II";
 	public static final String MODID = "lostbooks";
-	public static final String VERSION = "2.0.2";
+	public static final String VERSION = "2.0.3";
 	public static final String MC_VERSION = "[1.12.2]";
 	public static final String UPDATE_JSON = "https://raw.githubusercontent.com/WinDanesz/LostBooks-II/1.12.2/.forge/update.json";
 
@@ -74,8 +74,9 @@ public class LostBooks {
 		LostBooks.debugConsole("Loading in debug mode!");
 
 		LostBooks.CONFIG_DIRECTORY = event.getModConfigurationDirectory();
+		LostBooks.debugConsole("configpath? " + event.getModConfigurationDirectory().getPath());
 		LostBooks.CONFIG = new Configuration(event.getSuggestedConfigurationFile());
-		PropertyHelper.init(LostBooks.CONFIG);
+		ConfigPropertyHelper.init(LostBooks.CONFIG);
 
 		LostBooks.CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel("LB|CP");
 		LostBooks.CHANNEL.registerMessage(MessageCurrPage.Handler.class, MessageCurrPage.class, 0, Side.SERVER);
@@ -83,7 +84,7 @@ public class LostBooks {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		ConfigFileHelper.init();
+		InitConfig.init();
 		proxy.registerVillagerTrades();
 		new TickHandler();
 	}

@@ -3,7 +3,7 @@ package toast.lostBooks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import toast.lostBooks.book.Library;
-import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.config.ConfigPropertyHelper;
 import toast.lostBooks.helper.BookHelper;
 
 import java.util.HashSet;
@@ -11,8 +11,8 @@ import java.util.Iterator;
 
 public class Blackouts {
     // Properties stored for easy access.
-    public static final boolean DROP_BLACKOUTS = PropertyHelper.getBoolean(PropertyHelper.GENERAL, "uniqueBlackouts");
-    public static final boolean ADAPTIVE_DROPS = PropertyHelper.getBoolean(PropertyHelper.GENERAL, "adaptiveDrops");
+    public static final boolean DROP_BLACKOUTS = ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "uniqueBlackouts");
+    public static final boolean ADAPTIVE_DROPS = ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "adaptiveDrops");
 
     // Set of all book ids that have been blacked out.
     private final HashSet<String> blackouts;

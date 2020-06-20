@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import toast.lostBooks.LostBooks;
-import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.config.ConfigPropertyHelper;
 import toast.lostBooks.helper.BookHelper;
 import toast.lostBooks.helper.RandomHelper;
 
@@ -46,8 +46,7 @@ public abstract class Library {
                     if (category != null) {
                         story = category.getBookStats(entity);
                     }
-                }
-                else if (PropertyHelper.getBoolean(PropertyHelper.GENERAL, "markUnique")) {
+                } else if (ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "markUnique")) {
                     BookHelper.addItemText(book, "\u00a79Unique");
                 }
             }
@@ -72,8 +71,7 @@ public abstract class Library {
                     if (category != null) {
                         story = category.getBookStatsSpawn(player);
                     }
-                }
-                else if (PropertyHelper.getBoolean(PropertyHelper.GENERAL, "markUnique")) {
+                } else if (ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "markUnique")) {
                     BookHelper.addItemText(book, "\u00a79Unique");
                 }
             }
@@ -91,10 +89,10 @@ public abstract class Library {
         ArrayList<IBook> tradeableBooks = new ArrayList<IBook>(4);
         tradeableBooks.add(Library.COMMON_BOOKS);
         tradeableBooks.add(Library.AD_LIB_BOOKS);
-        if (PropertyHelper.getBoolean(PropertyHelper.TRADING, "sellUnique")) {
+		if (ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.TRADING, "sellUnique")) {
             tradeableBooks.add(Library.UNIQUE_BOOKS);
         }
-        if (PropertyHelper.getBoolean(PropertyHelper.TRADING, "sellLost")) {
+		if (ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.TRADING, "sellLost")) {
             tradeableBooks.add(Library.LOST_BOOKS);
         }
         IBook category = RandomHelper.chooseTrade(customer, tradeableBooks.toArray(new IBook[0]));

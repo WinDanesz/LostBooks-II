@@ -8,7 +8,7 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import toast.lostBooks.config.PropertyHelper;
+import toast.lostBooks.config.ConfigPropertyHelper;
 
 /**
  * Class responsible for handling loot injection.
@@ -19,7 +19,7 @@ import toast.lostBooks.config.PropertyHelper;
 
 @Mod.EventBusSubscriber
 public class LostBooksLoot {
-	private static final boolean ADD_CHEST_LOOT = PropertyHelper.getBoolean(PropertyHelper.GENERAL, "addChestLoot");
+	private static final boolean ADD_CHEST_LOOT = ConfigPropertyHelper.getBoolean(ConfigPropertyHelper.GENERAL, "addChestLoot");
 
 	private LostBooksLoot() {} // no instances!
 

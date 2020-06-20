@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 
 
+## [2.0.3] - 2020-06-20
+
+### Changed
+
+- Fixed initialization of the default book pack on servers
+- Added 'generateDefaultBookPackAtStart' ('True' by default) option to allow disabling the default book pack. The default book pack in the config gets recreated every time if this is 'True'. Set this to 'False' if you want to alter/remove the default pack.
+ 
 ## [2.0.2] - 2020-06-15
 
 ### Changed
