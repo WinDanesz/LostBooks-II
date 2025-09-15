@@ -17,8 +17,6 @@ out
 build
 .gradle
 
-.libraries
-
 # other
 eclipse
 run
