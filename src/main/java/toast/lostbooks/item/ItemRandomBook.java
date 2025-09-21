@@ -23,6 +23,7 @@ public class ItemRandomBook extends Item {
 	public ItemRandomBook() {
 		setCreativeTab(CreativeTabs.MISC);
 		setMaxStackSize(16);
+		setTranslationKey("lostbooks:random_book");
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import toast.lostbooks.helper.InitConfig;
 import java.io.File;
 import java.util.Random;
 
-@Mod(modid = LostBooks.MODID, name = LostBooks.NAME, version = "@VERSION@", acceptedMinecraftVersions = LostBooks.MC_VERSION, updateJSON = LostBooks.UPDATE_JSON)
+@Mod(modid = LostBooks.MODID, name = LostBooks.NAME, version = "1.0.4", acceptedMinecraftVersions = LostBooks.MC_VERSION, updateJSON = LostBooks.UPDATE_JSON)
 
 public class LostBooks {
     /* TODO *\

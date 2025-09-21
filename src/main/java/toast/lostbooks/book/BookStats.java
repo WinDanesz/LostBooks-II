@@ -1,7 +1,5 @@
 package toast.lostbooks.book;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -78,16 +76,16 @@ public class BookStats implements IBook {
 	/// Writes these BookStats to the book and returns it.
 	public ItemStack writeTo(ItemStack book) {
 		BookHelper.setTitleAndAuthor(book, this.bookId, this.title, this.author);
-
-		int y = 0;
-		for (String page : pages) {
-			JsonObject json = new JsonObject();
-			json.addProperty("text", page);
-			pages[y] = new Gson().toJson(json);
-			y++;
+		
+		// Convert pages to proper JSON format for Minecraft without modifying original array
+		String[] jsonPages = new String[pages.length];
+		for (int i = 0; i < pages.length; i++) {
+			// Escape quotes, backslashes, and newlines in the text content
+			String escapedText = pages[i].replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
+			jsonPages[i] = "{\"text\":\"" + escapedText + "\"}";
 		}
-
-		BookHelper.setPages(book, pages);
+		
+		BookHelper.setPages(book, jsonPages);
 		return book;
 	}
 

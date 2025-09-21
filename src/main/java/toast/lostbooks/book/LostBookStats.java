@@ -4,6 +4,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import toast.lostbooks.LostBooks;
 
 import java.io.File;
@@ -33,8 +35,25 @@ public class LostBookStats extends BookStats {
     @Override
     public ItemStack writeTo(ItemStack book) {
         if (this.bookTag != null) {
-			book.writeToNBT(bookTag); // book.readFromNBT(this.bookTag);
-		}
+            // Clean any JSON formatting from old captured books
+            NBTTagCompound cleanedTag = this.bookTag.copy();
+            if (cleanedTag.hasKey("tag") && cleanedTag.getCompoundTag("tag").hasKey("pages")) {
+                NBTTagList pages = cleanedTag.getCompoundTag("tag").getTagList("pages", 8);
+                for (int i = 0; i < pages.tagCount(); i++) {
+                    String pageText = pages.getStringTagAt(i);
+                    // Check if this is JSON formatted text and clean it
+                    if (pageText.startsWith("{\"text\":\"") && pageText.endsWith("\"}")) {
+                        // Extract the text content and unescape it
+                        String cleanText = pageText.substring(9, pageText.length() - 2);
+                        cleanText = cleanText.replace("\\n", "\n")
+                                           .replace("\\\"", "\"")
+                                           .replace("\\\\", "\\");
+                        pages.set(i, new NBTTagString(cleanText));
+                    }
+                }
+            }
+            book.writeToNBT(cleanedTag);
+        }
         this.bookFile.delete();
         return book;
     }
