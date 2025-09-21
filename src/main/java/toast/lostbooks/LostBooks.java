@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import toast.lostbooks.book.Library;
 import toast.lostbooks.command.CommandBlackouts;
+import toast.lostbooks.command.CommandNbt;
 import toast.lostbooks.config.ConfigPropertyHelper;
 import toast.lostbooks.helper.AdLibHelper;
 import toast.lostbooks.helper.FileHelper;
@@ -111,6 +112,7 @@ public class LostBooks {
 		FileHelper.init(event.getServer());
 
 		event.registerServerCommand(new CommandBlackouts());
+		event.registerServerCommand(new CommandNbt());
 		//		event.registerCommand(new CommandTest()); TODO
 	}
 
